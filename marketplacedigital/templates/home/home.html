@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron hero-spacer">
+      <h1>A Warm Welcome!</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+      <p>
+        <a class="btn btn-primary btn-large">Call to action!</a>
+      </p>
+    </header>
+
+    <hr>
+
+    <!-- Title -->
+    <div class="row">
+      <div class="col-lg-12">
+        <h3>Categorias</h3>
+      </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Categorias -->
+    <div class="row text-center">
+      {% for categoria in categorias %}
+        <div class="col-md-3 col-sm-6 hero-feature">
+          <div class="thumbnail">
+            <a href="/categoria/{{ categoria.slug }}">
+              <img src="/media/{{ categoria.photo }}" alt="">
+              <div class="caption">
+                <h3>{{ categoria.name }}</h3>
+              </div>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- /.row -->
+
+    <hr>
+
+  </div>
+  <!-- /.container -->
+{% endblock %}
