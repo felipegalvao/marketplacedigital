@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <h1>{{ category.name }}</h1>
+    <hr>
+    <div class="row">
+      {% for product in category_products %}
+        <div class="col-md-3">
+          <div class="thumbnail">
+            <a href="{% url 'show_product' product.slug %}">
+              <img src="/media/{{ product.photo }}" alt="">
+              <div class="caption text-center">
+                <h3>{{ product.name }}</h3>
+                <p><em>R$ {{ product.price }}</em></p>
+                <button class="btn btn-default btn-success">Ver Mais</button>
+              </div>
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

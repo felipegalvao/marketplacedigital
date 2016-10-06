@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from shop.models import Categoria
+from shop.models import Category
 
 def home(request):
-    categorias = Categoria.objects.all()
-    return render(request, 'home/home.html', { 'categorias': categorias })
+    categories = Category.objects.all()
+    return render(request, 'home/home.html', { 'categories': categories })

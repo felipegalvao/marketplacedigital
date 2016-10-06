@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1>{{ product.name }}</h1>
+      </div>
+      <div class="panel-body">
+        <p>{{ product.description }}</p>
+        <p>R$ {{ product.price }}</p>
+        <p><img src="/media/{{ product.photo }}" alt=""></p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
