@@ -11,6 +11,12 @@
         <p>{{ product.description }}</p>
         <p>R$ {{ product.price }}</p>
         <p><img src="/media/{{ product.photo }}" alt=""></p>
+        <h3>Arquivos</h3>
+        <ul>
+          {% for product_file in product_files %}
+            <li>{{ product_file.name }}</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   </div>

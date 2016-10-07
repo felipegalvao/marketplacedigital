@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <h1>Adicione arquivos ao produto</h1>
+    <p>Produto: <a href="{% url 'show_product' product.slug %}">{{ product.name }}</a></p>
+    <p>Através do formulário abaixo, você inclui arquivos em seu produto. Estes arquivos serão aprovados por nossa equipe antes que fiquem disponíveis para download pelos usuários.</p>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" name="name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="uploaded_file">Arquivo</label>
+            <input type="file" class="form-control" name="uploaded_file">
+          </div>
+
+          <div class="form-group">
+            <label for="sample_file">Arquivo de Amostra</label>
+            <input type="checkbox" name="sample_file" value="1"> Sim<br>
+            <em>Caso esta caixa seja marcada, qualquer usuário terá acesso a este arquivo, mesmo sem ter
+              adquirido o produto. É uma amostra do produto, que pode ser, por exemplo, um capítulo de
+              um ebook.</em>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Associar Arquivo</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+{% endblock %}

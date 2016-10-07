@@ -24,7 +24,11 @@ class Product(models.Model):
         return self.name
 
 class ProductFile(models.Model):
+    name = models.CharField(max_length=100)
     product = models.ForeignKey(Product, related_name='files')
     sample_file = models.BooleanField()
     uploaded_file = models.FileField(upload_to='arquivos/upload_usuario')
     approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return(self.product.name + " - " + self.name)

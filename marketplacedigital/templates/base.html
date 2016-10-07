@@ -1,11 +1,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
   <head>
     <title>Marketplace Digital</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="pt-BR">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
 
@@ -52,8 +53,24 @@
               <a href="#">Contact</a>
             </li>
           </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                role="button" aria-haspopup="true" aria-expanded="fase">
+                Minha conta <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'create_product' %}">Criar Produto</a></li>
+                <li><a href="#">Meus Produtos</a></li>
+
+              </ul>
+            </li>
+          </ul>
         </div>
         <!-- /.navbar-collapse -->
+
+
       </div>
       <!-- /.container -->
     </nav>

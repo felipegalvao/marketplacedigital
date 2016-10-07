@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <h1>Crie seu novo produto</h1>
+    <p>Preencha o formulário abaixo com as informações corretas para criar seu novo produto.</p>
+    <p>Após a criação do produto, você poderá incluir os arquivos que farão parte dele.</p>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" name="name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Categoria</label>
+            <select name="category" class="form-control">
+              <option value="" selected="selected">---------</option>
+              {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Descrição</label>
+            <textarea rows="4" class="form-control" name="description"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="price">Preço (R$)</label>
+            <input type="number" class="form-control" name="price" step="any">
+          </div>
+
+          <div class="form-group">
+            <label for="photo">Foto</label>
+            <input type="file" class="form-control" name="photo">
+          </div>
+
+          <div class="form-group">
+            <label for="pay_what_you_want">Modelo "Pague quanto quiser"?</label>
+            <input type="checkbox" name="pay_what_you_want" value="1"> Ativar<br>
+            <em>Neste modelo, o comprador pode definir o preço que irá pagar. Quando ativado,
+              o preço definido acima torna-se o preço mínimo do produto, e o consumidor
+              pode optar por pagar este valor ou mais.</em>
+          </div>
+
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Criar Produto</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+{% endblock %}
