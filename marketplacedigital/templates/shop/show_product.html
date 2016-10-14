@@ -14,7 +14,11 @@
         <h3>Arquivos</h3>
         <ul>
           {% for product_file in product_files %}
-            <li>{{ product_file.name }}</li>
+            {% if product_file.sample_file %}
+              <li><a href="/media/{{ product_file.uploaded_file }}">{{ product_file.name }}</a></li>
+            {% else %}
+              <li>{{ product_file.name }}</li>
+            {% endif %}
           {% endfor %}
         </ul>
       </div>

@@ -49,6 +49,7 @@ def my_product_admin(request, product_slug):
             product_file = product_file_form.save(commit=False)
             product_file.product = product
             product_file.save()
+            return HttpResponseRedirect(reverse('my_product_admin', args=(product.slug,)))
         else:
             error = 'Dados inválidos. Favor preencher novamente o formulário.'
             print(error)
@@ -56,3 +57,8 @@ def my_product_admin(request, product_slug):
 
     product_file_form = ProductFileForm()
     return render(request, 'shop/my_product_admin.html', { 'error': error, 'product': product, 'product_files': product_files })
+
+def my_products(request):
+    '''View that returns all of a user products'''
+    products = Product.objects.all()
+    return render(request, 'shop/my_products.html', { 'products': products })

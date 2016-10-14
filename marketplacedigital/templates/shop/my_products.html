@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+
+    <!-- Title -->
+    <div class="row">
+      <div class="col-lg-12">
+        <h3>Meus Produtos</h3>
+      </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Categorias -->
+    <div class="row text-center">      
+      {% for product in products %}
+        <div class="col-md-3">
+          <div class="thumbnail">
+
+              <img src="/media/{{ product.photo }}" alt="">
+              <div class="caption text-center">
+                <h3>{{ product.name }}</h3>
+                <a href="{% url 'show_product' product.slug %}">
+                  <button class="btn btn-default btn-success">Ver Mais</button>
+                </a>
+                <a href="{% url 'my_product_admin' product.slug %}">
+                  <button class="btn btn-default btn-success">Adicionar Produtos</button>
+                </a>
+              </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <!-- /.row -->
+
+    <hr>
+
+  </div>
+  <!-- /.container -->
+{% endblock %}

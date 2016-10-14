@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    {% if form.non_field_errors %}
+      <div class="alert alert-warning">
+        <ul>
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <h1>Cadastre-se</h1>
+    <p>Preencha o formulário abaixo para criar sua conta.</p>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label for="id_username">Nome de Usuário:</label>
+            {{ form.username }}
+            <!-- <input id="id_username" maxlength="30" minlength="3" name="username" class="form-control" type="text" required> -->
+            {{ form.username.errors }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_first_name">Primeiro nome:</label>
+            <input id="id_first_name" maxlength="30" name="first_name" class="form-control" type="text">
+            {{ form.first_name.errors }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_last_name">Último nome:</label>
+            <input id="id_last_name" maxlength="30" name="last_name" class="form-control" type="text">
+            {{ form.last_name.errors }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_email">Email:</label>
+            <input id="id_email" maxlength="100" name="email" class="form-control" type="email" required>
+            {{ form.email.errors }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_password1">Senha:</label>
+            <input id="id_password1" maxlength="50" minlength="6" name="password1" class="form-control" type="password" required>
+            {{ form.password1.errors }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_password2">Confirme sua senha:</label>
+            <input id="id_password2" maxlength="50" minlength="6" name="password2" class="form-control" type="password" oninput="check(this)" required>
+            <script language='javascript' type='text/javascript'>
+              function check(input) {
+                  if (input.value != document.getElementById('id_password1').value) {
+                      input.setCustomValidity('Senhas não são iguais.');
+                  } else {
+                      // input is valid -- reset the error message
+                      input.setCustomValidity('');
+                  }
+              }
+            </script>
+            {{ form.password2.errors }}
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Registrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+  <script language='javascript' type='text/javascript'>
+    function check(input) {
+      if (input.value != document.getElementById('password').value) {
+        input.setCustomValidity('Password Must be Matching.');
+      } else {
+        // input is valid -- reset the error message
+        input.setCustomValidity('');
+      }
+    }
+  </script>
+{% endblock %}
