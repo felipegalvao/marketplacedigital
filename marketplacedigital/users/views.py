@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 from .forms import RegistrationForm, LoginForm
@@ -85,6 +85,10 @@ def user_login(request):
         form = LoginForm()
 
     return render(request, 'users/login.html', { 'form' : form })
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')
 
 #View called from activation email. Activate user if link didn't expire (48h default), or offer to
 #send a second link if the first expired.
