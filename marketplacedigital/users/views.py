@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
-from .forms import RegistrationForm
+
+from .forms import RegistrationForm, LoginForm
 from .models import Profile
 
 import hashlib
@@ -20,12 +23,17 @@ def register(request):
             #datas['email_path']="/ActivationEmail.txt"
             #datas['email_subject']="Activation de votre compte yourdomain"
             # form.sendEmail(datas)
+            print(form.cleaned_data['password1'])
 
-            user = User(
+            '''user = User(
                 username=form.cleaned_data['username'],
                 email=form.cleaned_data['email'],
                 password=form.cleaned_data['password1']
-            )
+            )'''
+
+            user = User.objects.create_user(form.cleaned_data['username'],
+                                            form.cleaned_data['email'],
+                                            form.cleaned_data['password1'])
 
             user.save()
 
@@ -51,6 +59,32 @@ def register(request):
         form = RegistrationForm() #Display form with error messages (incorrect fields, etc)
         print(form.errors)
     return render(request, 'users/register.html', locals())
+
+def user_login(request):
+    username = password = ''
+    if request.method == 'POST':
+        print('request POST')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            print('form valido')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(username=username, password=password)
+            print(user)
+            if user is not None:
+                profile = Profile.objects.get(user=user)
+                print(profile)
+                if profile.activated:
+                    login(request, user)
+                    return redirect('/')
+        else:
+            print('form invalido')
+            print(form.errors)
+    else:
+        form = LoginForm()
+
+    return render(request, 'users/login.html', { 'form' : form })
 
 #View called from activation email. Activate user if link didn't expire (48h default), or offer to
 #send a second link if the first expired.

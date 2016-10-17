@@ -4,6 +4,10 @@
 {% block page %}
   <div class="container">
 
+    {% if user.is_authenticated %}
+      <p>{{ user.username }}</p>
+    {% endif %}
+
     <!-- Jumbotron Header -->
     <header class="jumbotron hero-spacer">
       <div class="row">
