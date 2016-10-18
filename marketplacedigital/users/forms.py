@@ -38,7 +38,7 @@ class RegistrationForm(forms.Form):
     #Sending activation email ------>>>!! Warning : Domain name is hardcoded below !!<<<------
     #The email is written in a text file (it contains templatetags which are populated by the method below)
     def sendEmail(self, datas):
-        link="http://yourdomain.com/activate/"+datas['activation_key'] # Edit This!
+        link="http://localhost:8000/usuario/ativar/"+datas['activation_key'] # Edit This!
         c=Context({'activation_link':link,'username':datas['username']})
         f = open(MEDIA_ROOT+datas['email_path'], 'r')
         t = Template(f.read())

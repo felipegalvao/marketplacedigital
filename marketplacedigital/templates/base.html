@@ -85,6 +85,20 @@
       <!-- /.container -->
     </nav>
 
+    {% if messages %}
+      <div class="container">
+        <div class="alert alert-info">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+
+
     {% block page %}
 
     {% endblock %}

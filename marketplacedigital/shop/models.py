@@ -14,6 +14,7 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=100)
     description = models.TextField()
     slug = AutoSlugField(populate_from='name')
@@ -37,7 +38,7 @@ class ProductFile(models.Model):
         return(self.product.name + " - " + self.name)
 
 class Purchase(models.Model):
-    # user = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     product = models.ForeignKey(Product)
     value = models.DecimalField(max_digits=6, decimal_places=2)
     time = models.DateTimeField(default=timezone.now)

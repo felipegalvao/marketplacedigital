@@ -21,6 +21,7 @@
       <div class="col-md-6">
         <form method="POST">
           {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}" />
 
           <div class="form-group">
             <label for="id_username">Nome de Usuário:</label>
@@ -38,6 +39,15 @@
             <button type="submit" class="btn btn-success">Fazer Login</button>
           </div>
         </form>
+
+        <p>Ainda não criou sua conta? <a href="{% url 'register' %}">Clique aqui!</a></p>
+
+        <p>Problemas para fazer login? Clique abaixo para ajudarmos!</p>
+        <p>
+          <a href="#"><button class="btn btn-default">Esqueci a senha</button></a>
+          <a href="#"><button class="btn btn-default">Esqueci o nome de usuário</button></a>
+          <a href="#"><button class="btn btn-default">Não recebi link de ativação</button></a>
+        </p>
       </div>
     </div>
   </div>

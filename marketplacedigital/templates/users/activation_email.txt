@@ -1,0 +1,9 @@
+Ative sua conta no Marketplace Digital
+
+Olá, {{ username }}! Recebemos seu cadastro no Marketplace Digital. Para ativar sua conta, clique no link abaixo:
+
+{{ activation_link }}
+
+Este link expira em {{ key_expiration }}
+
+Caso não tenha se cadastrado em nosso site, pode desconsiderar este email.

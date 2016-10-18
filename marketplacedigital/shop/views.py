@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from .models import Category, Product, ProductFile
 from .forms import ProductForm, ProductFileForm
@@ -19,6 +20,7 @@ def show_product(request, product_slug):
     product_files = product.files.all()
     return render(request, 'shop/show_product.html', { 'product': product, 'product_files': product_files })
 
+@login_required(login_url='/usuario/login/')
 def create_product(request):
     '''Create a new product'''
     categories = Category.objects.all()
@@ -27,7 +29,7 @@ def create_product(request):
         product_form = ProductForm(request.POST, request.FILES)
         if product_form.is_valid():
             product = product_form.save(commit=False)
-            # product.user = request.user
+            product.user = request.user
             product.save()
             return HttpResponseRedirect(reverse('my_product_admin', args=(product.slug,)))
         else:
@@ -38,6 +40,7 @@ def create_product(request):
     product_form = ProductForm()
     return render(request, 'shop/create_product.html', { 'error': error, 'categories': categories, 'product_form': product_form })
 
+@login_required(login_url='/usuario/login/')
 def my_product_admin(request, product_slug):
     '''View for the user to manage a product he created'''
     product = Product.objects.get(slug=product_slug)
@@ -58,7 +61,8 @@ def my_product_admin(request, product_slug):
     product_file_form = ProductFileForm()
     return render(request, 'shop/my_product_admin.html', { 'error': error, 'product': product, 'product_files': product_files })
 
+@login_required(login_url='/usuario/login/')
 def my_products(request):
     '''View that returns all of a user products'''
-    products = Product.objects.all()
+    products = Product.objects.filter(user=request.user)
     return render(request, 'shop/my_products.html', { 'products': products })

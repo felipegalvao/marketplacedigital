@@ -1,10 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
+# Imports for email sending
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
 
 from .forms import RegistrationForm, LoginForm
 from .models import Profile
@@ -14,6 +19,7 @@ import random
 import datetime
 
 def register(request):
+    email_data = {}
     if request.user.is_authenticated():
         return redirect('/')
     if request.method == 'POST':
@@ -21,19 +27,16 @@ def register(request):
         if form.is_valid():
             print('Form is valid')
             #datas['email_path']="/ActivationEmail.txt"
-            #datas['email_subject']="Activation de votre compte yourdomain"
+            email_data['email_subject']= "Ative sua conta - Marketplace Digital"
             # form.sendEmail(datas)
-            print(form.cleaned_data['password1'])
 
-            '''user = User(
-                username=form.cleaned_data['username'],
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password1']
-            )'''
 
-            user = User.objects.create_user(form.cleaned_data['username'],
-                                            form.cleaned_data['email'],
-                                            form.cleaned_data['password1'])
+            user = User.objects.create_user(username=form.cleaned_data['username'],
+                                            email=form.cleaned_data['email'],
+                                            password=form.cleaned_data['password1'],
+                                            first_name=form.cleaned_data['first_name'],
+                                            last_name=form.cleaned_data['last_name']
+                                            )
 
             user.save()
 
@@ -52,6 +55,28 @@ def register(request):
             profile.activated = False
 
             profile.save()
+
+            email_subject = "Olá " + user.first_name + ". Ative sua conta no Marketplace Digital"
+            from_email = "felipect86@gmail.com"
+            to_email = user.email
+
+            text_template = get_template('users/activation_email.txt')
+            html_template = get_template('users/activation_email.html')
+
+            domain = 'http://localhost:8000/'
+            link = 'usuario/ativar/' + profile.activation_key
+            activation_link = domain + link
+
+            d = Context({ 'username': user.username, 'activation_link': activation_link, 'key_expiration': profile.key_expiration })
+
+            text_content = text_template.render(d)
+            html_content = html_template.render(d)
+
+            msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+            messages.info(request, 'Um email com um link de ativação foi enviado para <strong>' + user.email + '</strong>. Ative sua conta para fazer login.')
 
             request.session['registered']=True #For display purposes
             return redirect('/')
@@ -77,7 +102,12 @@ def user_login(request):
                 print(profile)
                 if profile.activated:
                     login(request, user)
-                    return redirect('/')
+                    if request.POST.get('next'):
+                        return redirect(request.POST.get('next'))
+                    else:
+                        return redirect('/')
+                else:
+                    form.add_error(None, 'Esta conta ainda não foi ativada. Caso não tenha recebido o email de ativação, clique no link abaixo.')
         else:
             print('form invalido')
             print(form.errors)
@@ -90,24 +120,24 @@ def user_logout(request):
     logout(request)
     return redirect('/')
 
-#View called from activation email. Activate user if link didn't expire (48h default), or offer to
+#View called from activation email. Activate user if link didn't expire, or offer to
 #send a second link if the first expired.
-def activation(request, key):
+def activate(request, activation_key):
     activation_expired = False
     already_active = False
-    profile = get_object_or_404(Profile, activation_key=key)
-    if profile.user.is_active == False:
-        if timezone.now() > profile.key_expires:
+    profile = get_object_or_404(Profile, activation_key=activation_key)
+    if profile.activated == False:
+        if timezone.now() > profile.key_expiration:
             activation_expired = True #Display: offer the user to send a new activation link
             id_user = profile.user.id
         else: #Activation successful
-            profile.user.is_active = True
-            profile.user.save()
+            profile.activated = True
+            profile.save()
 
     #If user is already active, simply display error message
     else:
         already_active = True #Display : error message
-    return render(request, 'siteApp/activation.html', locals())
+    return render(request, 'users/activation.html', locals())
 
 def new_activation_link(request, user_id):
     form = RegistrationForm()

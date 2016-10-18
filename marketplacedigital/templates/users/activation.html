@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    {% if activation_expired == False and already_active == False %}
+      <p>Sua conta agora está ativa. Você pode fazer login com seu nome de usuário e senha.</p>
+      <a href="{% url 'user_login' %}"><button class="btn btn-primary btn-default">Login</button></a>
+    {% elif activation_expired == True %}
+      <p>Seu link de ativação expirou. Clique no botão abaixo para fazer receber um novo link de ativação.</p>
+      <a href="#"><button class="btn btn-primary btn-default">Enviar link de ativação</button></a>
+    {% elif already_active == True %}
+      <p>Sua conta já estava ativa. Você pode fazer login com seu nome de usuário e senha.</p>
+      <a href="{% url 'user_login' %}"><button class="btn btn-primary btn-default">Login</button></a>
+    {% endif %}
+  </div>
+{% endblock %}
