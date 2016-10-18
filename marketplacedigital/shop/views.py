@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .models import Category, Product, ProductFile
 from .forms import ProductForm, ProductFileForm
@@ -17,8 +18,11 @@ def show_category(request, category_slug):
 def show_product(request, product_slug):
     '''Show product details'''
     product = Product.objects.get(slug=product_slug)
+    product_files_sample = product.files.filter(sample_file=True)
+    product_files_not_sample = product.files.filter(sample_file=False)
     product_files = product.files.all()
-    return render(request, 'shop/show_product.html', { 'product': product, 'product_files': product_files })
+    return render(request, 'shop/show_product.html', { 'product': product, 'product_files_sample': product_files_sample,
+                                                       'product_files_not_sample': product_files_not_sample})
 
 @login_required(login_url='/usuario/login/')
 def create_product(request):
@@ -44,6 +48,9 @@ def create_product(request):
 def my_product_admin(request, product_slug):
     '''View for the user to manage a product he created'''
     product = Product.objects.get(slug=product_slug)
+    if product.user != request.user:
+        messages.warning(request, 'Você não tem autorização para acessar esta página.')
+        return redirect('/')
     product_files = product.files.all()
     error = ''
     if request.method == 'POST':

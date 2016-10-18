@@ -11,16 +11,24 @@
         <p>{{ product.description }}</p>
         <p>R$ {{ product.price }}</p>
         <p><img src="/media/{{ product.photo }}" alt=""></p>
-        <h3>Arquivos</h3>
-        <ul>
-          {% for product_file in product_files %}
-            {% if product_file.sample_file %}
+        {% if product_files_sample %}
+          <h3>Arquivos de Amostra</h3>
+          <p>Uma pequena amostra do produto final, acessível para todos, para que você possa comprovar a sua qualidade.</p>
+          <ul>
+            {% for product_file in product_files_sample %}
               <li><a href="/media/{{ product_file.uploaded_file }}">{{ product_file.name }}</a></li>
-            {% else %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if product_files_not_sample %}
+          <h3>Arquivos Finais</h3>
+          <p>Abaixo, a lista dos arquivos que você recebe ao adquirir este produto:</p>
+          <ul>
+            {% for product_file in product_files_not_sample %}
               <li>{{ product_file.name }}</li>
-            {% endif %}
-          {% endfor %}
-        </ul>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </div>
     </div>
   </div>

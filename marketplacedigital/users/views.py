@@ -76,7 +76,7 @@ def register(request):
             msg.attach_alternative(html_content, "text/html")
             msg.send()
 
-            messages.info(request, 'Um email com um link de ativação foi enviado para <strong>' + user.email + '</strong>. Ative sua conta para fazer login.')
+            messages.info(request, 'Um email com um link de ativação foi enviado para ' + user.email + '. Ative sua conta para fazer login.')
 
             request.session['registered']=True #For display purposes
             return redirect('/')
