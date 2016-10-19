@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>Compra - {{ purchase.product.name }}</h1>
+        <h3>Detalhes</h3>
+        <p><strong>Valor Pago:</strong> R$ {{ purchase.value }}</p>
+        <p><strong>Data da Compra:</strong> {{ purchase.time }}</p>
+        <h3>Arquivos Disponíveis</h3>
+        <table class="table table-responsive table-bordered table-striped">
+          {% for file in purchase_files %}
+            <tr>
+              <td>{{ file.name }}</td>
+              <td><a href="/media/{{ file.uploaded_file }}">Baixar</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

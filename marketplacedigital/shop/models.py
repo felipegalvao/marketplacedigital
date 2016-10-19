@@ -14,7 +14,7 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='products')
     name = models.CharField(max_length=100)
     description = models.TextField()
     slug = AutoSlugField(populate_from='name')

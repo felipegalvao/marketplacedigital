@@ -13,6 +13,7 @@ from django.template import Context
 
 from .forms import RegistrationForm, LoginForm
 from .models import Profile
+from shop.models import Purchase, ProductFile
 
 import hashlib
 import random
@@ -164,3 +165,13 @@ def new_activation_link(request, user_id):
         request.session['new_link']=True #Display: new link sent
 
     return redirect('/')
+
+@login_required(login_url='/usuario/login/')
+def my_purchases(request):
+    purchases = Purchase.objects.filter(user=request.user)
+    return render(request, 'users/my_purchases.html', { 'purchases': purchases })
+
+def show_purchase(request, purchase_id):
+    purchase = get_object_or_404(Purchase, pk=purchase_id)
+    purchase_files = ProductFile.objects.filter(product=purchase.product)
+    return render(request, 'users/show_purchase.html', { 'purchase': purchase, 'purchase_files': purchase_files })
