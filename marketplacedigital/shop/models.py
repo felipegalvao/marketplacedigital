@@ -27,11 +27,15 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_uploaded/{0}/{1}'.format(instance.product.user.id, filename)
+
 class ProductFile(models.Model):
     name = models.CharField(max_length=100)
     product = models.ForeignKey(Product, related_name='files')
     sample_file = models.BooleanField()
-    uploaded_file = models.FileField(upload_to='arquivos/upload_usuario')
+    uploaded_file = models.FileField(upload_to=user_directory_path)
     approved = models.BooleanField(default=False)
 
     def __str__(self):

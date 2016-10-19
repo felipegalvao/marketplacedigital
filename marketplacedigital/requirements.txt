@@ -1,0 +1,11 @@
+defusedxml==0.4.1
+Django==1.10.2
+django-autoslug==1.9.3
+gunicorn==19.6.0
+Jinja2==2.8
+MarkupSafe==0.23
+oauthlib==2.0.0
+Pillow==3.4.1
+python3-openid==3.0.10
+requests==2.11.1
+requests-oauthlib==0.7.0
