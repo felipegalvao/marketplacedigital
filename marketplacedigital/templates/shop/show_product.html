@@ -29,6 +29,9 @@
             {% endfor %}
           </ul>
         {% endif %}
+        <a href="{% url 'product_purchase' product.slug %}">
+          <button class="btn btn-default btn-primary">Comprar</button>
+        </a>
       </div>
     </div>
   </div>

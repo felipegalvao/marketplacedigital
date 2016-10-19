@@ -41,6 +41,7 @@ class Purchase(models.Model):
     user = models.ForeignKey(User)
     product = models.ForeignKey(Product)
     value = models.DecimalField(max_digits=6, decimal_places=2)
+    paid = models.BooleanField(default=False)
     time = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import Category, Product, ProductFile
+from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
 
 def show_category(request, category_slug):
@@ -73,3 +73,19 @@ def my_products(request):
     '''View that returns all of a user products'''
     products = Product.objects.filter(user=request.user)
     return render(request, 'shop/my_products.html', { 'products': products })
+
+@login_required(login_url='/usuario/login/')
+def product_purchase(request, product_slug):
+    product = Product.objects.get(slug=product_slug)
+    return render(request, 'shop/product_purchase.html', { 'product': product })
+
+@login_required(login_url='/usuario/login/')
+def purchase_confirmation(request, product_slug):
+    product = Product.objects.get(slug=product_slug)
+    purchase = Purchase(user = request.user,
+                        product = product,
+                        value = product.price,
+                        paid = True)
+    purchase.save()
+    messages.success(request, 'Sua compra foi concluída. Assim que seu pagamento for aprovado, você será notificado e poderá acessar os seus arquivos.')
+    return redirect('/')

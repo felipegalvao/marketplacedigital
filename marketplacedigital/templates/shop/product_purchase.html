@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <h1>Comprar - {{ product.name }}</h1>
+    <p>Preencha o formulário abaixo com seus dados de pagamento para confirmar a compra.</p>
+    <p><a href="{% url 'show_product' product.slug %}">{{ product.name }}</a></p>
+    <a href="{% url 'purchase_confirmation' product.slug %}"><button class="btn btn-default btn-primary">Completar Compra</button></a>
+  </div>
+{% endblock %}
