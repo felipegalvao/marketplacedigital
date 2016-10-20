@@ -12,5 +12,6 @@ tests/coverage_html/
 tests/.coverage
 build/
 tests/report/
-marketplacedigital/settings.py
+marketplacedigital/marketplacedigital/settings.py
+marketplacedigital/marketplacedigital/settings/settings_secrets.py
 media

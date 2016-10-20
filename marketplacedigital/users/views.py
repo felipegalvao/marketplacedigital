@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import HttpResponse
 
 # Imports for email sending
 from django.core.mail import EmailMultiAlternatives
@@ -15,6 +16,8 @@ from .forms import RegistrationForm, LoginForm
 from .models import Profile
 from shop.models import Purchase, ProductFile
 
+from wsgiref.util import FileWrapper
+import os, tempfile, zipfile
 import hashlib
 import random
 import datetime
@@ -171,7 +174,21 @@ def my_purchases(request):
     purchases = Purchase.objects.filter(user=request.user)
     return render(request, 'users/my_purchases.html', { 'purchases': purchases })
 
+@login_required(login_url='/usuario/login/')
 def show_purchase(request, purchase_id):
     purchase = get_object_or_404(Purchase, pk=purchase_id)
     purchase_files = ProductFile.objects.filter(product=purchase.product)
     return render(request, 'users/show_purchase.html', { 'purchase': purchase, 'purchase_files': purchase_files })
+
+@login_required(login_url='/usuario/login/')
+def send_file(request, user_id, product_id, filename):
+    """
+    Send a file through Django without loading the whole file into
+    memory at once. The FileWrapper will turn the file object into an
+    iterator for chunks of 8KB.
+    """
+    filename = __file__ # Select your file here.
+    wrapper = FileWrapper(file(filename))
+    response = HttpResponse(wrapper, content_type='text/plain')
+    response['Content-Length'] = os.path.getsize(filename)
+    return response

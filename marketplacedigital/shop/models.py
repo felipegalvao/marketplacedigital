@@ -29,7 +29,7 @@ class Product(models.Model):
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return 'user_uploaded/{0}/{1}'.format(instance.product.user.id, filename)
+    return 'user_uploaded/{0}/{1}/{2}'.format(instance.product.user.id, instance.product.id, filename)
 
 class ProductFile(models.Model):
     name = models.CharField(max_length=100)
