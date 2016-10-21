@@ -195,3 +195,6 @@ def send_file(request, file_id):
         messages.warning(request, 'Você não tem permissão para acessar este arquivo. Adquira-o primeiro.')
         return HttpResponseRedirect(reverse('show_product', args=(product_file.product.slug,)))
         # return redirect('/')
+
+def notificacao_pagseguro(request):
+    print(request.POST)

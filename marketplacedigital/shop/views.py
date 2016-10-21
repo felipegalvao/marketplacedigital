@@ -85,11 +85,17 @@ def product_purchase(request, product_slug):
 def purchase_confirmation(request, product_slug):
     product = Product.objects.get(slug=product_slug)
 
+    purchase = Purchase(user = request.user,
+                        product = product,
+                        value = product.price,
+                        paid = False)
+    purchase.save()
+
     dados_pagamento = {
         "email":"felipect86@gmail.com",
         "token":"A90C580ABDB1475296FCCDED71E91C04",
         "currency":"BRL",
-        "reference":"REF1234",
+        "reference":str(purchase.id),
         # "senderName": request.user.first_name + ' ' + request.user.last_name,
         "senderEmail": str(request.user.email),
         "itemId1" : "001",
@@ -97,6 +103,7 @@ def purchase_confirmation(request, product_slug):
         "itemAmount1" : str(product.price),
         "itemQuantity1" : "1",
     }
+
     print(dados_pagamento)
 
     codigo_pagamento = ""
@@ -106,11 +113,10 @@ def purchase_confirmation(request, product_slug):
 
     print(codigo_pagamento)
 
-    purchase = Purchase(user = request.user,
-                        product = product,
-                        value = product.price,
-                        paid = True)
-    purchase.save()
+
+
+    return redirect('https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=' + codigo_pagamento)
+
     messages.success(request, 'Sua compra foi concluída. Assim que seu pagamento for aprovado, você será notificado e poderá acessar os seus arquivos.')
     return redirect('/')
 
