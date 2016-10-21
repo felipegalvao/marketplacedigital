@@ -5,7 +5,8 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.http import HttpResponse
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 
 # Imports for email sending
 from django.core.mail import EmailMultiAlternatives
@@ -15,12 +16,14 @@ from django.template import Context
 from .forms import RegistrationForm, LoginForm
 from .models import Profile
 from shop.models import Purchase, ProductFile
+from marketplacedigital.settings.base import BASE_DIR
 
 from wsgiref.util import FileWrapper
 import os, tempfile, zipfile
 import hashlib
 import random
 import datetime
+from sendfile import sendfile
 
 def register(request):
     email_data = {}
@@ -112,6 +115,8 @@ def user_login(request):
                         return redirect('/')
                 else:
                     form.add_error(None, 'Esta conta ainda não foi ativada. Caso não tenha recebido o email de ativação, clique no link abaixo.')
+            else:
+                form.add_error(None, 'Usuário e senha não conferem. Favor inserir uma combinação válida.')
         else:
             print('form invalido')
             print(form.errors)
@@ -181,14 +186,12 @@ def show_purchase(request, purchase_id):
     return render(request, 'users/show_purchase.html', { 'purchase': purchase, 'purchase_files': purchase_files })
 
 @login_required(login_url='/usuario/login/')
-def send_file(request, user_id, product_id, filename):
-    """
-    Send a file through Django without loading the whole file into
-    memory at once. The FileWrapper will turn the file object into an
-    iterator for chunks of 8KB.
-    """
-    filename = __file__ # Select your file here.
-    wrapper = FileWrapper(file(filename))
-    response = HttpResponse(wrapper, content_type='text/plain')
-    response['Content-Length'] = os.path.getsize(filename)
-    return response
+def send_file(request, file_id):
+    product_file = ProductFile.objects.get(id=file_id)
+    purchase = Purchase.objects.filter(user=request.user).filter(product=product_file.product)
+    if purchase:
+        return sendfile(request, product_file.uploaded_file.path)
+    else:
+        messages.warning(request, 'Você não tem permissão para acessar este arquivo. Adquira-o primeiro.')
+        return HttpResponseRedirect(reverse('show_product', args=(product_file.product.slug,)))
+        # return redirect('/')

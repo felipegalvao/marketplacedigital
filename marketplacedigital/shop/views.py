@@ -7,6 +7,8 @@ from django.contrib import messages
 from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
 
+import requests
+
 def show_category(request, category_slug):
     '''Show all products from a Category'''
     category = Category.objects.get(slug=category_slug)
@@ -82,6 +84,28 @@ def product_purchase(request, product_slug):
 @login_required(login_url='/usuario/login/')
 def purchase_confirmation(request, product_slug):
     product = Product.objects.get(slug=product_slug)
+
+    dados_pagamento = {
+        "email":"felipect86@gmail.com",
+        "token":"A90C580ABDB1475296FCCDED71E91C04",
+        "currency":"BRL",
+        "reference":"REF1234",
+        # "senderName": request.user.first_name + ' ' + request.user.last_name,
+        "senderEmail": str(request.user.email),
+        "itemId1" : "001",
+        "itemDescription1" : "Pagamento do produto - " + product.name,
+        "itemAmount1" : str(product.price),
+        "itemQuantity1" : "1",
+    }
+    print(dados_pagamento)
+
+    codigo_pagamento = ""
+    r = requests.post("https://ws.sandbox.pagseguro.uol.com.br/v2/checkout", data=dados_pagamento)
+    r_texto = r.text
+    codigo_pagamento = find_between(r_texto, "<code>","</code")
+
+    print(codigo_pagamento)
+
     purchase = Purchase(user = request.user,
                         product = product,
                         value = product.price,
@@ -89,3 +113,11 @@ def purchase_confirmation(request, product_slug):
     purchase.save()
     messages.success(request, 'Sua compra foi concluída. Assim que seu pagamento for aprovado, você será notificado e poderá acessar os seus arquivos.')
     return redirect('/')
+
+def find_between( s, first, last ):
+    try:
+        start = s.index( first ) + len( first )
+        end = s.index( last, start )
+        return s[start:end]
+    except ValueError:
+        return ""
