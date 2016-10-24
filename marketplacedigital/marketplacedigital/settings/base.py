@@ -76,9 +76,13 @@ WSGI_APPLICATION = 'marketplacedigital.wsgi.application'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "marketplacedigital",
+        "USER": settings_secrets.DB_USER,
+        "PASSWORD": settings_secrets.DB_PASSWORD,
+        "HOST": "localhost",
+        "PORT": "",
     }
 }
 
@@ -146,5 +150,5 @@ DATABASES['default'].update(db_from_env)
 
 CORS_ORIGIN_WHITELIST = (
     'google.com',
-    'localhost:8000'    
+    'localhost:8000'
 )
