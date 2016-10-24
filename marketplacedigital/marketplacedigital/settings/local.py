@@ -28,3 +28,5 @@ CORS_ALLOW_HEADERS = default_headers + (
 )
 
 CORS_ALLOW_CREDENTIALS = True
+
+BASE_DOMAIN = 'http://localhost:8000/'

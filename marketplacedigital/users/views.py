@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 # Imports for email sending
 from django.core.mail import EmailMultiAlternatives
@@ -72,7 +73,7 @@ def register(request):
             text_template = get_template('users/activation_email.txt')
             html_template = get_template('users/activation_email.html')
 
-            domain = 'http://localhost:8000/'
+            domain = settings.BASE_DOMAIN
             link = 'usuario/ativar/' + profile.activation_key
             activation_link = domain + link
 

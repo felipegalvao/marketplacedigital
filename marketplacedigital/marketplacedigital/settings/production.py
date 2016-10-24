@@ -31,3 +31,5 @@ DATABASES = {
         "PORT": "",
     }
 }
+
+BASE_DOMAIN = 'http://felipegalvao.pythonanywhere.com/'
