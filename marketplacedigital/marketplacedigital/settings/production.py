@@ -37,9 +37,12 @@ DATABASES = {
 BASE_DOMAIN = 'http://felipegalvao.pythonanywhere.com/'
 
 # Amazon AWS settings for S3 storage
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'marketplacedigital.settings.s3utils.MediaRootS3BotoStorage'
+STATICFILES_STORAGE = 'marketplacedigital.settings.s3utils.StaticRootS3BotoStorage'
 
 AWS_ACCESS_KEY_ID = settings_secrets.AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY = settings_secrets.AWS_SECRET_ACCESS_KEY
 AWS_STORAGE_BUCKET_NAME = settings_secrets.AWS_STORAGE_BUCKET_NAME
+
+STATICFILES_LOCATION = 'static'
+MEDIAFILES_LOCATION = 'media'
