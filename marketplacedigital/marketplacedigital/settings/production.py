@@ -1,10 +1,11 @@
-# settings/local.py
+# settings/production.py
 
 from .base import *
 
 DEBUG = False
 
 # Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = settings_secrets.EMAIL_HOST
 EMAIL_HOST_USER = settings_secrets.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = settings_secrets.EMAIL_HOST_PASSWORD
