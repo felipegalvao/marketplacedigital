@@ -19,3 +19,14 @@ DATABASES['default'].update(db_from_env)
 ALLOWED_HOSTS += ("felipegalvao.pythonanywhere.com", )
 
 MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware", )
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "felipegalvao$marketplacedigital",
+        "USER": settings_secrets.PRODUCTION_DB_USER,
+        "PASSWORD": settings_secrets.PRODUCTION_DB_PASSWORD,
+        "HOST": "felipegalvao.mysql.pythonanywhere-services.com",
+        "PORT": "",
+    }
+}
