@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 # Imports for email sending
 from django.core.mail import EmailMultiAlternatives
@@ -196,5 +198,8 @@ def send_file(request, file_id):
         return HttpResponseRedirect(reverse('show_product', args=(product_file.product.slug,)))
         # return redirect('/')
 
+
 def notificacao_pagseguro(request):
-    print(request.POST)
+    notification_code = request.POST['notificationCode']
+    notification_type = request.POST['notificationType']
+    print(notification_code)
