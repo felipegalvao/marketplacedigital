@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from . import settings_secrets
-from unipath import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = Path(__file__).ancestor(3)
+here = lambda *dirs: os.path.join(os.path.abspath(os.path.dirname(__file__)), *dirs)
+BASE_DIR = here("..", "..")
+root = lambda *dirs: os.path.join(os.path.abspath(BASE_DIR), *dirs)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -126,13 +127,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    root("static"),
 ]
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Setup upload directory for Media
-MEDIA_ROOT = BASE_DIR.child("media")
+MEDIA_ROOT = root("media")
 MEDIA_URL = '/media/'
 
 
