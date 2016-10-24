@@ -15,3 +15,7 @@ EMAIL_USE_TLS = settings_secrets.EMAIL_USE_TLS
 import dj_database_url
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
+
+ALLOWED_HOSTS += ("felipegalvao.pythonanywhere.com", )
+
+MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware", )
