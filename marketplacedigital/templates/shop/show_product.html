@@ -10,13 +10,13 @@
       <div class="panel-body">
         <p>{{ product.description }}</p>
         <p>R$ {{ product.price }}</p>
-        <p><img src="/media/{{ product.photo }}" alt=""></p>
+        <p><img src="{{ product.photo.url }}" alt=""></p>
         {% if product_files_sample %}
           <h3>Arquivos de Amostra</h3>
           <p>Uma pequena amostra do produto final, acessível para todos, para que você possa comprovar a sua qualidade.</p>
           <ul>
             {% for product_file in product_files_sample %}
-              <li><a href="/media/{{ product_file.uploaded_file }}">{{ product_file.name }}</a></li>
+              <li><a href="{{ product_file.uploaded_file.url }}">{{ product_file.name }}</a></li>
             {% endfor %}
           </ul>
         {% endif %}

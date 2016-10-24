@@ -42,7 +42,7 @@
       <div class="col-md-12">
         <ul>
           {% for file in product_files %}
-            <li><a href="/media/{{ file.uploaded_file }}">{{ file.name }}</a></li>
+            <li><a href="{{ file.uploaded_file.url }}">{{ file.name }}</a></li>
           {% endfor %}
       </div>
 

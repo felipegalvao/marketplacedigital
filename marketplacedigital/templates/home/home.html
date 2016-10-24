@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page %}
-  <div class="container">  
+  <div class="container">
 
     <!-- Jumbotron Header -->
     <header class="jumbotron hero-spacer">
@@ -48,7 +48,7 @@
         <div class="col-md-3 col-sm-6 hero-feature">
           <div class="thumbnail">
             <a href="{% url 'show_category' category.slug %}">
-              <img src="/media/{{ category.photo }}" alt="">
+              <img src="{{ category.photo.url }}" alt="">
               <div class="caption">
                 <h3>{{ category.name }}</h3>
               </div>

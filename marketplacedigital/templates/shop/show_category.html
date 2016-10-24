@@ -10,7 +10,7 @@
         <div class="col-md-3">
           <div class="thumbnail">
             <a href="{% url 'show_product' product.slug %}">
-              <img src="/media/{{ product.photo }}" alt="">
+              <img src="{{ product.photo.url }}" alt="">
               <div class="caption text-center">
                 <h3>{{ product.name }}</h3>
                 <p><em>R$ {{ product.price }}</em></p>

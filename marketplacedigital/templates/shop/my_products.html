@@ -13,12 +13,12 @@
     <!-- /.row -->
 
     <!-- Categorias -->
-    <div class="row text-center">      
+    <div class="row text-center">
       {% for product in products %}
         <div class="col-md-3">
           <div class="thumbnail">
 
-              <img src="/media/{{ product.photo }}" alt="">
+              <img src="{{ product.photo.url }}" alt="">
               <div class="caption text-center">
                 <h3>{{ product.name }}</h3>
                 <a href="{% url 'show_product' product.slug %}">
