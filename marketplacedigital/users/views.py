@@ -214,10 +214,11 @@ def notificacao_pagseguro(request):
 
         request_link = "https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/" + notification_code
 
-        r = requests.get(request_link, data=dados_consulta)
+        r = requests.get(request_link, params=dados_consulta)
         r_texto = r.text
 
         print(request_link)
+        print(r.url)
         print(r_texto)
 
         purchase_id = find_between(r_texto, "<reference>","</reference>")
