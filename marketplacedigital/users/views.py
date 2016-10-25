@@ -26,6 +26,7 @@ import os, tempfile, zipfile
 import hashlib
 import random
 import datetime
+import requests
 from sendfile import sendfile
 
 def register(request):
@@ -206,6 +207,32 @@ def notificacao_pagseguro(request):
         notification_code = request.POST['notificationCode']
         notification_type = request.POST['notificationType']
 
+        dados_consulta = {
+            "email":"felipect86@gmail.com",
+            "token":"A90C580ABDB1475296FCCDED71E91C04"
+        }
+
+        request_link = "https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/" + notification_code
+
+        r = requests.get(request_link, data=dados_consulta)
+        r_texto = r.text
+
+        purchase_id = find_between(r_texto, "<reference>","</reference>")
+        transaction_status = find_between(r_texto, "<status>","</status>")
+
+        purchase = Purchase.objects.get(pk=int(purchase_id))
+        if transaction_status == "3":
+            purchase.paid = True
+            purchase.save()
+
         return HttpResponse('OK')
     else:
         return redirect('/')
+
+def find_between( s, first, last ):
+    try:
+        start = s.index( first ) + len( first )
+        end = s.index( last, start )
+        return s[start:end]
+    except ValueError:
+        return ""

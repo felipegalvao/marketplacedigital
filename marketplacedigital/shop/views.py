@@ -109,11 +109,9 @@ def purchase_confirmation(request, product_slug):
     codigo_pagamento = ""
     r = requests.post("https://ws.sandbox.pagseguro.uol.com.br/v2/checkout", data=dados_pagamento)
     r_texto = r.text
-    codigo_pagamento = find_between(r_texto, "<code>","</code")
+    codigo_pagamento = find_between(r_texto, "<code>","</code>")
 
-    print(codigo_pagamento)
-
-
+    print(r_texto)
 
     return redirect('https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=' + codigo_pagamento)
 
