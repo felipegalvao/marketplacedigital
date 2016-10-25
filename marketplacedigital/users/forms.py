@@ -20,18 +20,31 @@ class RegistrationForm(forms.Form):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         username = self.cleaned_data.get('username')
+        email = self.cleaned_data.get('email')
 
+        # Check if passwords match
         if password1 and password1 != password2:
             self._errors['password2'] = ErrorList([u"As senhas não batem."])
 
+        # Check if username already exists
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             user = None
 
-        # user = User.objects.get(username=username)
         if user:
             self._errors['username'] = ErrorList([u"Nome de usuário já existe, favor escolher outro."])
+
+        # Check if provided email is already registered
+        user = None
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+
+        if user:
+            self._errors['email'] = ErrorList([u"Este email já está cadastrado."])
 
         return self.cleaned_data
 
