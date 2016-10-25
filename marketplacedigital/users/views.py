@@ -199,7 +199,7 @@ def send_file(request, file_id):
         return HttpResponseRedirect(reverse('show_product', args=(product_file.product.slug,)))
         # return redirect('/')
 
-
+@csrf_exempt
 def notificacao_pagseguro(request):
     notification_code = request.POST['notificationCode']
     notification_type = request.POST['notificationType']
