@@ -217,6 +217,9 @@ def notificacao_pagseguro(request):
         r = requests.get(request_link, data=dados_consulta)
         r_texto = r.text
 
+        print(request_link)
+        print(r_texto)
+
         purchase_id = find_between(r_texto, "<reference>","</reference>")
         transaction_status = find_between(r_texto, "<status>","</status>")
 
