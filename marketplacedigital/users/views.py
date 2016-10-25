@@ -201,6 +201,11 @@ def send_file(request, file_id):
 
 @csrf_exempt
 def notificacao_pagseguro(request):
-    notification_code = request.POST['notificationCode']
-    notification_type = request.POST['notificationType']
-    print(notification_code)
+    if request.method == 'POST':
+        request.encoding = 'ISO-8859-1'
+        notification_code = request.POST['notificationCode']
+        notification_type = request.POST['notificationType']
+
+        return HttpResponse('OK')
+    else:
+        return redirect('/')
