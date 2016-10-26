@@ -4,8 +4,9 @@
 from django import forms
 from django.forms.utils import ErrorList
 from django.contrib.auth.forms import AuthenticationForm
+from django.conf import settings
 
-from .models import User
+from .models import User, Profile
 
 class RegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=150, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -51,7 +52,8 @@ class RegistrationForm(forms.Form):
     #Sending activation email ------>>>!! Warning : Domain name is hardcoded below !!<<<------
     #The email is written in a text file (it contains templatetags which are populated by the method below)
     def sendEmail(self, datas):
-        link="http://localhost:8000/usuario/ativar/"+datas['activation_key'] # Edit This!
+        domain = settings.BASE_DOMAIN
+        link= domain + "usuario/ativar/"+datas['activation_key']
         c=Context({'activation_link':link,'username':datas['username']})
         f = open(MEDIA_ROOT+datas['email_path'], 'r')
         t = Template(f.read())
@@ -65,3 +67,31 @@ class LoginForm(forms.Form):
                                widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'username'}))
     password = forms.CharField(label="Password", max_length=50,
                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'name': 'password'}))
+
+class ActivationLinkForm(forms.Form):
+    email = forms.EmailField(max_length=100,error_messages={'invalid': ("Email inválido.")}, widget=forms.EmailInput(attrs={'class':'form-control'}))
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+
+        if user == None:
+            self._errors['email'] = ErrorList([u"Este email não está cadastrado."])
+
+        return self.cleaned_data
+
+
+    def sendEmail(self, datas):
+        domain = settings.BASE_DOMAIN
+        link= domain + "usuario/ativar/"+datas['activation_key'] # Edit This!
+        c=Context({'activation_link':link,'username':datas['username']})
+        f = open(MEDIA_ROOT+datas['email_path'], 'r')
+        t = Template(f.read())
+        f.close()
+        message=t.render(c)
+        #print unicode(message).encode('utf8')
+        send_mail(datas['email_subject'], message, 'yourdomain <no-reply@yourdomain.com>', [datas['email']], fail_silently=False)

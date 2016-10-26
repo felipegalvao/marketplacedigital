@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h1>Reenviar o email de ativação</h1>
+        <p>Fez o cadastro e não recebeu o email para ativar sua conta? Insira seu email abaixo e reenviaremos!</p>
+
+        <form method="post">
+          {% csrf_token %}
+          {{ form.email.errors }}
+          <div class="form-group">
+            <label for="id_email">Email</label>
+            <input id="id_email" maxlength="254" name="email" type="email" required="" class="form-control">
+            {{ form.email.errors }}
+          </div>
+
+          <div class="form-group">
+            <input type="submit" value="Reenviar email de ativação" class="btn btn-primary btn-default" />
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

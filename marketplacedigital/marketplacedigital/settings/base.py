@@ -133,8 +133,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = root("static")
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 # Setup upload directory for Media
 MEDIA_ROOT = root("media")
 MEDIA_URL = '/media/'

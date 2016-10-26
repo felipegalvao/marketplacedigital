@@ -44,9 +44,8 @@
 
         <p>Problemas para fazer login? Clique abaixo para ajudarmos!</p>
         <p>
-          <a href="#"><button class="btn btn-default">Esqueci a senha</button></a>
-          <a href="#"><button class="btn btn-default">Esqueci o nome de usuário</button></a>
-          <a href="#"><button class="btn btn-default">Não recebi link de ativação</button></a>
+          <a href="{% url 'password_reset' %}"><button class="btn btn-default">Esqueci a senha / nome de usuário</button></a>
+          <a href="{% url 'resend_activation_email' %}"><button class="btn btn-default">Não recebi link de ativação</button></a>
         </p>
       </div>
     </div>
