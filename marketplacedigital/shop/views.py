@@ -12,7 +12,10 @@ import requests
 def show_category(request, category_slug):
     '''Show all products from a Category'''
     category = Category.objects.get(slug=category_slug)
-    category_products = Product.objects.filter(category=category)
+    if request.user.is_authenticated():
+        category_products = Product.objects.filter(category=category).exclude(user=request.user)
+    else:
+        category_products = Product.objects.filter(category=category)
 
     return render(request, 'shop/show_category.html', { 'category_products' : category_products,
                                                         'category': category })
@@ -83,6 +86,10 @@ def product_purchase(request, product_slug):
     purchase = Purchase.objects.filter(user=request.user, product=product)
     if purchase:
         messages.warning(request, 'Você já comprou este produto, não é necessário comprar novamente.')
+        return redirect('/')
+
+    if product.user == request.user:
+        messages.warning(request, 'Este produto é seu, você não precisa comprá-lo.')
         return redirect('/')
 
     return render(request, 'shop/product_purchase.html', { 'product': product })

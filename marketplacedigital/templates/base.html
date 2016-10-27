@@ -68,7 +68,9 @@
                   <li><a href="{% url 'create_product' %}">Criar Produto</a></li>
                   {% if user.products %}
                     <li><a href="{% url 'my_products' %}">Meus Produtos</a></li>
+                    <li><a href="{% url 'my_sales' %}">Minhas Vendas</a></li>
                   {% endif %}
+                  <li role="separator" class="divider"></li>
                   <li><a href="{% url 'my_purchases' %}">Minhas Compras</a></li>
                   <li role="separator" class="divider"></li>
                   <li><a href="{% url 'user_logout' %}">Logout</a></li>

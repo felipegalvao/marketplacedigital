@@ -33,6 +33,7 @@ from sendfile import sendfile
 def register(request):
     email_data = {}
     if request.user.is_authenticated():
+        messages.info('Você já está logado, não precisa fazer um novo cadastro.')
         return redirect('/')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -140,8 +141,17 @@ def my_purchases(request):
     return render(request, 'users/my_purchases.html', { 'purchases': purchases })
 
 @login_required(login_url='/usuario/login/')
+def my_sales(request):
+    # my_products = Product.objects.filter(user=request.user)
+    my_sales = Purchase.objects.filter(product__user=request.user)
+    return render(request, 'users/my_sales.html', { 'my_sales': my_sales })
+
+@login_required(login_url='/usuario/login/')
 def show_purchase(request, purchase_id):
     purchase = get_object_or_404(Purchase, pk=purchase_id)
+    if purchase.user != request.user:
+        messages.warning(request, 'Você não tem permissão para acessar esta página.')
+        return redirect('/')
     purchase_sample_files = ProductFile.objects.filter(product=purchase.product, sample_file=True)
     purchase_not_sample_files = ProductFile.objects.filter(product=purchase.product, sample_file=False)
     return render(request, 'users/show_purchase.html', { 'purchase': purchase, 'purchase_sample_files': purchase_sample_files,
@@ -193,8 +203,6 @@ def resend_activation_email(request):
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             user = None
-        print("Oi estou vivo")
-        print(user)
         if user == None:
             messages.warning(request, 'Este email não está cadastrado. Caso queira, pode se cadastrar abaixo.')
             return HttpResponseRedirect(reverse('register'))
