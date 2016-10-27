@@ -20,6 +20,7 @@ from .forms import RegistrationForm, LoginForm, ActivationLinkForm
 from .models import Profile
 from shop.models import Purchase, ProductFile
 from marketplacedigital.settings.base import BASE_DIR
+from marketplacedigital.settings import settings_secrets
 
 from wsgiref.util import FileWrapper
 import os, tempfile, zipfile
@@ -67,25 +68,7 @@ def register(request):
 
             profile.save()
 
-            email_subject = "Olá " + user.first_name + ". Ative sua conta no Marketplace Digital"
-            from_email = "felipect86@gmail.com"
-            to_email = user.email
-
-            text_template = get_template('users/activation_email.txt')
-            html_template = get_template('users/activation_email.html')
-
-            domain = settings.BASE_DOMAIN
-            link = 'usuario/ativar/' + profile.activation_key
-            activation_link = domain + link
-
-            d = Context({ 'username': user.username, 'activation_link': activation_link, 'key_expiration': profile.key_expiration })
-
-            text_content = text_template.render(d)
-            html_content = html_template.render(d)
-
-            msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
+            send_activation_email(user, profile)
 
             messages.info(request, 'Um email com um link de ativação foi enviado para ' + user.email + '. Ative sua conta para fazer login.')
 
@@ -151,32 +134,6 @@ def activate(request, activation_key):
         already_active = True #Display : error message
     return render(request, 'users/activation.html', locals())
 
-def new_activation_link(request, user_id):
-    form = RegistrationForm()
-    datas={}
-    user = User.objects.get(id=user_id)
-    if user is not None and not user.is_active:
-        datas['username']=user.username
-        datas['email']=user.email
-        datas['email_path']="/ResendEmail.txt"
-        datas['email_subject']="Nouveau lien d'activation yourdomain"
-
-        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        usernamesalt = datas['username']
-        if isinstance(usernamesalt, unicode):
-            usernamesalt = usernamesalt.encode('utf8')
-        datas['activation_key']= hashlib.sha1(salt+usernamesalt).hexdigest()
-
-        profile = Profile.objects.get(user=user)
-        profile.activation_key = datas['activation_key']
-        profile.key_expires = datetime.datetime.strftime(datetime.datetime.now() + datetime.timedelta(days=2), "%Y-%m-%d %H:%M:%S")
-        profile.save()
-
-        form.sendEmail(datas)
-        request.session['new_link']=True #Display: new link sent
-
-    return redirect('/')
-
 @login_required(login_url='/usuario/login/')
 def my_purchases(request):
     purchases = Purchase.objects.filter(user=request.user)
@@ -208,8 +165,8 @@ def notificacao_pagseguro(request):
         notification_type = request.POST['notificationType']
 
         dados_consulta = {
-            "email":"felipect86@gmail.com",
-            "token":"A90C580ABDB1475296FCCDED71E91C04"
+            "email": settings_secrets.PAGSEGURO_EMAIL,
+            "token": settings_secrets.PAGSEGURO_TOKEN_SANDBOX
         }
 
         request_link = "https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/" + notification_code
@@ -251,25 +208,7 @@ def resend_activation_email(request):
             datetime.timedelta(days=7), "%Y-%m-%d %H:%M:%S"))
         profile.save()
 
-        domain = settings.BASE_DOMAIN
-        link = 'usuario/ativar/' + profile.activation_key
-        activation_link = domain + link
-
-        email_subject = "Olá " + user.first_name + ". Ative sua conta no Marketplace Digital"
-        from_email = "felipect86@gmail.com"
-        to_email = user.email
-
-        text_template = get_template('users/activation_email.txt')
-        html_template = get_template('users/activation_email.html')
-
-        d = Context({ 'username': user.username, 'activation_link': activation_link, 'key_expiration': profile.key_expiration })
-
-        text_content = text_template.render(d)
-        html_content = html_template.render(d)
-
-        msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        send_activation_email(user, profile)
 
         messages.info(request, 'O email com seu link de ativação foi reenviado para ' + user.email + '. Ative sua conta para fazer login.')
 
@@ -286,3 +225,24 @@ def find_between( s, first, last ):
         return s[start:end]
     except ValueError:
         return ""
+
+def send_activation_email(user, profile):
+    domain = settings.BASE_DOMAIN
+    link = 'usuario/ativar/' + profile.activation_key
+    activation_link = domain + link
+
+    email_subject = "Olá " + user.first_name + ". Ative sua conta no Marketplace Digital"
+    from_email = "felipect86@gmail.com"
+    to_email = user.email
+
+    text_template = get_template('users/activation_email.txt')
+    html_template = get_template('users/activation_email.html')
+
+    d = Context({ 'username': user.username, 'activation_link': activation_link, 'key_expiration': profile.key_expiration })
+
+    text_content = text_template.render(d)
+    html_content = html_template.render(d)
+
+    msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()

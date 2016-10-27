@@ -79,6 +79,12 @@ def my_products(request):
 @login_required(login_url='/usuario/login/')
 def product_purchase(request, product_slug):
     product = Product.objects.get(slug=product_slug)
+
+    purchase = Purchase.objects.filter(user=request.user, product=product)
+    if purchase:
+        messages.warning(request, 'Você já comprou este produto, não é necessário comprar novamente.')
+        return redirect('/')
+
     return render(request, 'shop/product_purchase.html', { 'product': product })
 
 @login_required(login_url='/usuario/login/')

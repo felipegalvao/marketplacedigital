@@ -44,6 +44,10 @@ footer {
   color: #FCF7C5;
 }
 
+.alert {
+  margin-top: 20px;
+}
+
 /* Style for Home Page */
 
 .thumbnail a>img, .thumbnail>img {
