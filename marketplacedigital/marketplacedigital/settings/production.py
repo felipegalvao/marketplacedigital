@@ -47,6 +47,6 @@ AWS_STORAGE_BUCKET_NAME = settings_secrets.AWS_STORAGE_BUCKET_NAME
 STATICFILES_LOCATION = 'static'
 MEDIAFILES_LOCATION = 'media'
 
-SENDFILE_BACKEND = 'sendfile.backends.development'
+SENDFILE_BACKEND = 'sendfile.backends.mod_wsgi'
 
 PAGSEGURO_BASE_URL = 'https://ws.sandbox.pagseguro.uol.com.br/'

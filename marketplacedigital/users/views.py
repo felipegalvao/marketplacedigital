@@ -174,7 +174,7 @@ def send_file(request, file_id):
     product_file = ProductFile.objects.get(id=file_id)
     purchase = Purchase.objects.filter(user=request.user).filter(product=product_file.product)
     if purchase:
-        return sendfile(request, product_file.uploaded_file.path, attachment=True)
+        return sendfile(request, product_file.uploaded_file, attachment=True)
     else:
         messages.warning(request, 'Você não tem permissão para acessar este arquivo. Adquira-o primeiro.')
         return HttpResponseRedirect(reverse('show_product', args=(product_file.product.slug,)))
