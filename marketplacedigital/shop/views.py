@@ -24,11 +24,15 @@ def show_category(request, category_slug):
 def show_product(request, product_slug):
     '''Show product details'''
     product = Product.objects.get(slug=product_slug)
-    product_files_sample = product.files.filter(sample_file=True)
-    product_files_not_sample = product.files.filter(sample_file=False)
+    product_files_sample = product.files.filter(sample_file=True, approved=True)
+    product_files_not_sample = product.files.filter(sample_file=False, approved=True)
+    if not product_files_not_sample:
+        messages.info(request, 'Pedimos desculpas, mas os arquivos referentes a este produto ainda não foram aprovados. Favor selecionar outro produto ou retornar posteriormente.')
+        return redirect('/')
     product_files = product.files.all()
     return render(request, 'shop/show_product.html', { 'product': product, 'product_files_sample': product_files_sample,
-                                                       'product_files_not_sample': product_files_not_sample})
+                                                       'product_files_not_sample': product_files_not_sample,
+                                                       'product_files': product_files})
 
 @login_required(login_url='/usuario/login/')
 def create_product(request):

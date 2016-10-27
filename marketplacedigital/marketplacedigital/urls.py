@@ -18,10 +18,12 @@ from django.contrib import admin
 
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('',include('home.urls')),
     url('',include('shop.urls')),
     url(r'^usuario/', include('users.urls')),
+    url(r'^obrigado/$', TemplateView.as_view(template_name="thank_you.html"), name='thank_you'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

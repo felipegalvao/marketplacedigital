@@ -29,9 +29,13 @@
             {% endfor %}
           </ul>
         {% endif %}
-        <a href="{% url 'product_purchase' product.slug %}">
-          <button class="btn btn-default btn-primary">Comprar</button>
-        </a>
+        {% if product_files_not_sample %}
+          <a href="{% url 'product_purchase' product.slug %}">
+            <button class="btn btn-default btn-primary">Comprar</button>
+          </a>
+        {% else %}
+          <button class="btn btn-default btn-disabled">Comprar</button> - <em>Este produto ainda não possui arquivos finais aprovados.</em>
+        {% endif %}
       </div>
     </div>
   </div>

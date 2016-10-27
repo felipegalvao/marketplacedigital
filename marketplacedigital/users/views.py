@@ -204,6 +204,22 @@ def notificacao_pagseguro(request):
             purchase.paid = True
             purchase.save()
 
+            email_subject = "Linkplace - Olá " + user.first_name + ". Seu pagamento foi confirmado."
+            from_email = "felipect86@gmail.com"
+            to_email = user.email
+
+            text_template = get_template('users/payment_confirmation.txt')
+            html_template = get_template('users/payment_confirmation.html')
+
+            d = Context({ 'purchase': purchase })
+
+            text_content = text_template.render(d)
+            html_content = html_template.render(d)
+
+            msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
         return HttpResponse('OK')
     else:
         return redirect('/')

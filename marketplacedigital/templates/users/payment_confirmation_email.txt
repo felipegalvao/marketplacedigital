@@ -1,0 +1,11 @@
+Olá, {{ username }}!
+
+Seu pagamento para o pedido abaixo foi confirmado:
+
+{{ purchase.product.name }}
+{{ purchase.time }}
+R$ {{ purchase.value }}
+
+Caso queira, já pode ir para http://www.linkplace.com.br, fazer o login e acessar seus arquivos.
+
+Abraços!
