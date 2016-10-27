@@ -50,6 +50,7 @@ class Purchase(models.Model):
     value = models.DecimalField(max_digits=6, decimal_places=2)
     paid = models.BooleanField(default=False)
     time = models.DateTimeField(default=timezone.now)
+    seller_commission = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
         return(self.product.name)
