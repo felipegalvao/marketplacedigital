@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.db.models import Sum
 
 # Imports for email sending
 from django.core.mail import EmailMultiAlternatives
@@ -143,8 +144,19 @@ def my_purchases(request):
 @login_required(login_url='/usuario/login/')
 def my_sales(request):
     # my_products = Product.objects.filter(user=request.user)
-    my_sales = Purchase.objects.filter(product__user=request.user)
-    return render(request, 'users/my_sales.html', { 'my_sales': my_sales })
+    my_paid_sales = Purchase.objects.filter(product__user=request.user, paid=True)
+    total_paid_sales_value = my_paid_sales.aggregate(Sum('value'))['value__sum']
+    total_paid_sales_commission = my_paid_sales.aggregate(Sum('seller_commission'))['seller_commission__sum']
+
+    my_non_paid_sales = Purchase.objects.filter(product__user=request.user, paid=False)
+    total_non_paid_sales_value = my_non_paid_sales.aggregate(Sum('value'))['value__sum']
+    total_non_paid_sales_commission = my_non_paid_sales.aggregate(Sum('seller_commission'))['seller_commission__sum']
+    return render(request, 'users/my_sales.html', { 'my_paid_sales': my_paid_sales,
+                                                    'my_non_paid_sales': my_non_paid_sales,
+                                                    'total_paid_sales_value': total_paid_sales_value,
+                                                    'total_paid_sales_commission': total_paid_sales_commission,
+                                                    'total_non_paid_sales_value': total_non_paid_sales_value,
+                                                    'total_non_paid_sales_commission': total_non_paid_sales_commission})
 
 @login_required(login_url='/usuario/login/')
 def show_purchase(request, purchase_id):

@@ -6,6 +6,7 @@ from django.contrib import messages
 
 from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
+from marketplacedigital.settings.project_utils import calculate_seller_commission
 
 import requests
 
@@ -13,9 +14,9 @@ def show_category(request, category_slug):
     '''Show all products from a Category'''
     category = Category.objects.get(slug=category_slug)
     if request.user.is_authenticated():
-        category_products = Product.objects.filter(category=category).exclude(user=request.user)
+        category_products = Product.objects.filter(category=category, approved=True, files__isnull=False).exclude(user=request.user)
     else:
-        category_products = Product.objects.filter(category=category)
+        category_products = Product.objects.filter(category=category, approved=True, files__isnull=False)
 
     return render(request, 'shop/show_category.html', { 'category_products' : category_products,
                                                         'category': category })
@@ -101,7 +102,8 @@ def purchase_confirmation(request, product_slug):
     purchase = Purchase(user = request.user,
                         product = product,
                         value = product.price,
-                        paid = False)
+                        paid = False,
+                        seller_commission=calculate_seller_commission(product.price))
     purchase.save()
 
     dados_pagamento = {

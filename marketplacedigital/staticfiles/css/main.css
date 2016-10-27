@@ -89,3 +89,22 @@ footer {
   max-height: 200px;
   margin: auto;
 }
+
+
+/* Styles for My Sales Page */
+
+.th-sales-values,  .td-sales-values {
+  width: 20%;
+  text-align: center;
+}
+
+.table-my-sales tfoot {
+  background-color: #29221F;
+  color: #FFF;
+  font-weight: bold;
+}
+
+.table-my-sales thead {
+  background-color: #FC354C;
+  color: #FFF;
+}

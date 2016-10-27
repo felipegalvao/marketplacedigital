@@ -4,22 +4,29 @@
 {% block page %}
   <div class="container">
     <h1>{{ category.name }}</h1>
+    <p><em>{{ category.description }}</em></p>
     <hr>
     <div class="row">
-      {% for product in category_products %}
-        <div class="col-md-3">
-          <div class="thumbnail">
-            <a href="{% url 'show_product' product.slug %}">
-              <img src="{{ product.photo.url }}" alt="">
-              <div class="caption text-center">
-                <h3>{{ product.name }}</h3>
-                <p><em>R$ {{ product.price }}</em></p>
-                <button class="btn btn-default btn-success">Ver Mais</button>
-              </div>
-            </a>
+      {% if category_products %}
+        {% for product in category_products %}
+          <div class="col-md-3">
+            <div class="thumbnail">
+              <a href="{% url 'show_product' product.slug %}">
+                <img src="{{ product.photo.url }}" alt="">
+                <div class="caption text-center">
+                  <h3>{{ product.name }}</h3>
+                  <p><em>R$ {{ product.price }}</em></p>
+                  <button class="btn btn-default btn-success">Ver Mais</button>
+                </div>
+              </a>
+            </div>
           </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-md-12">
+          <p>Ainda não temos produtos nesta categoria.</p>
         </div>
-      {% endfor %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}

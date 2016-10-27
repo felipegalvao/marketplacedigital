@@ -44,20 +44,20 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                role="button" aria-haspopup="true" aria-expanded="fase">
-                Categorias <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Categoria 1</a></li>
-                <li><a href="#">Categoria 2</a></li>
-                <li><a href="#">Categoria 3</a></li>
-              </ul>
-            </li>
+            <li><a href="/">Home</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
+            <li>
+              <form class="navbar-form" role="search" action="/pesquisar">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar..." name="q">
+                <div class="input-group-btn">
+                  <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+              </div>
+              </form>
+            </li>
             {% if user.is_authenticated %}
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"
