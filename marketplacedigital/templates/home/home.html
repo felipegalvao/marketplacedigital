@@ -2,41 +2,39 @@
 {% load static %}
 
 {% block page %}
+  <!-- <div class="container-fluid fluid-home">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <h1>Marketbit, o marketplace de produtos digitais</h1>
+        </div>
+        <div class="col-md-5">
+          <img src="{% static 'img/creative-tree.png' %}" alt="" class="img-responsive">
+        </div>
+      </div>
+    </div>
+  </div> -->
+
   <div class="container">
 
     <!-- Jumbotron Header -->
     <header class="jumbotron hero-spacer">
       <div class="row">
-        <div class="col-md-12">
-          <h1>Bem-vindo ao Marketplace Digital!</h1>
-          <p>Compre e venda bens digitais com muita facilidade e segurança!</p>
-          <hr>
+        <div class="col-md-7">
+          <h1>Linkplace, o marketplace de produtos digitais</h1>
+          <p>Venda e compre produtos digitais com muita facilidade.</p>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6 text-center">
-          <p>É criador de conteúdo? Cadastre-se agora e comece a vender!</p>
-          <p>
-            <a class="btn btn-primary btn-large">Cadastro de Criador</a>
-          </p>
-        </div>
-        <div class="col-md-6 text-center">
-          <p>Quer comprar bens digitais? Olhe nossas categorias abaixo e veja o que pode te interessar.</p>
-          <p>
-            <a class="btn btn-primary btn-large" href="#categorias">Vá para as Categorias</a>
-          </p>
+        <div class="col-md-5 text-center">
+          <img src="{% static 'img/chinese-panda-bear.png' %}" alt="" class="img-responsive img-jumbotron-home">
         </div>
       </div>
 
     </header>
 
-    <hr>
-
     <!-- Title -->
     <div class="row">
       <div class="col-lg-12">
-        <h3>Categorias</h3>
+        <h3 class="h3-categorias text-center text-uppercase">Categorias</h3>
       </div>
     </div>
     <!-- /.row -->
@@ -46,10 +44,10 @@
       <a name="categorias">
       {% for category in categories %}
         <div class="col-md-3 col-sm-6 hero-feature">
-          <div class="thumbnail">
+          <div class="thumbnail thumbnail-home">
             <a href="{% url 'show_category' category.slug %}">
               <img src="{{ category.photo.url }}" alt="">
-              <div class="caption">
+              <div class="caption caption-home">
                 <h3>{{ category.name }}</h3>
               </div>
             </a>

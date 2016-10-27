@@ -1,7 +1,22 @@
+/*
+--------------- Paleta de Cores ---------------
+Vermelho - #FC354C
+Cinza Escuro - #29221F
+Azul Petróleo - #13747D
+Azul Claro - #0ABFBC
+Bege Claro - #FCF7C5
+------------ Fim da Paleta de Cores -----------
+
+
 /* --------------- Original Style for Bootstrap Theme ------------ */
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Work Sans', sans-serif;
+}
+
 body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    font-family: 'Roboto', sans-serif;
 }
 
 .hero-spacer {
@@ -18,4 +33,55 @@ footer {
 
 .td-filename {
   width: 80%;
+}
+
+.navbar-inverse {
+  background-color: #13747D;
+
+}
+
+.navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-brand {
+  color: #FCF7C5;
+}
+
+/* Style for Home Page */
+
+.thumbnail a>img, .thumbnail>img {
+  padding: 30px;
+}
+
+.thumbnail-home {
+  padding: 0;
+  background-color: #FCF7C5;
+}
+
+.caption-home {
+  background-color: #FC354C;
+}
+
+.h3-categorias {
+  background-color: #29221F;
+  color: #FCF7C5;
+  padding: 10px;
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+.jumbotron h1 {
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+.jumbotron {
+  background-color: #0ABFBC;
+  color: #FFF;
+}
+
+.fluid-home {
+  background-color: #FC354C;
+}
+
+.img-jumbotron-home {
+  max-height: 200px;
+  margin: auto;
 }

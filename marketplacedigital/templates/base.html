@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
 
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700|Work+Sans:400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
@@ -38,19 +39,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Marketplace Digital</a>
+          <a class="navbar-brand" href="/">Linkplace</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li>
-              <a href="#">About</a>
-            </li>
-            <li>
-              <a href="#">Services</a>
-            </li>
-            <li>
-              <a href="#">Contact</a>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                role="button" aria-haspopup="true" aria-expanded="fase">
+                Categorias <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Categoria 1</a></li>
+                <li><a href="#">Categoria 2</a></li>
+                <li><a href="#">Categoria 3</a></li>
+              </ul>
             </li>
           </ul>
 
