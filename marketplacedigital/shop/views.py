@@ -136,8 +136,11 @@ def purchase_confirmation(request, product_slug):
     return redirect('/')
 
 def search_products(request):
-    search_string = request.GET['q']
-    products = Product.objects.filter(Q(name__icontains=search_string) | Q(description__icontains=search_string)).filter(approved=True)
+    search_string = request.GET.get('q', "")
+    if search_string:
+        products = Product.objects.filter(Q(name__icontains=search_string) | Q(description__icontains=search_string)).filter(approved=True)
+    else:
+        products = None
     return render(request, 'shop/search_products.html', { 'products': products })
 
 def find_between( s, first, last ):
