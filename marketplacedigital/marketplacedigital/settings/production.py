@@ -17,7 +17,7 @@ import dj_database_url
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
-ALLOWED_HOSTS += ("felipegalvao.pythonanywhere.com", )
+ALLOWED_HOSTS += ("www.linkplace.com.br", )
 
 MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware", )
 
