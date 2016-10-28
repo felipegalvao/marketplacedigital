@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'pesquisar/$', views.search_products, name='search_products'),
     url(r'categorias/(?P<category_slug>[\w|-]+)/$', views.show_category, name='show_category'),
     url(r'produtos/criar/$', views.create_product, name='create_product'),
     url(r'produtos/meus_produtos/$', views.my_products, name='my_products'),

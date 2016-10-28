@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 
 from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
@@ -13,10 +14,7 @@ import requests
 def show_category(request, category_slug):
     '''Show all products from a Category'''
     category = Category.objects.get(slug=category_slug)
-    if request.user.is_authenticated():
-        category_products = Product.objects.filter(category=category, approved=True, files__isnull=False).exclude(user=request.user)
-    else:
-        category_products = Product.objects.filter(category=category, approved=True, files__isnull=False)
+    category_products = Product.objects.filter(category=category, approved=True, files__isnull=False)
 
     return render(request, 'shop/show_category.html', { 'category_products' : category_products,
                                                         'category': category })
@@ -136,6 +134,11 @@ def purchase_confirmation(request, product_slug):
 
     messages.success(request, 'Sua compra foi concluída. Assim que seu pagamento for aprovado, você será notificado e poderá acessar os seus arquivos.')
     return redirect('/')
+
+def search_products(request):
+    search_string = request.GET['q']
+    products = Product.objects.filter(Q(name__icontains=search_string) | Q(description__icontains=search_string)).filter(approved=True)
+    return render(request, 'shop/search_products.html', { 'products': products })
 
 def find_between( s, first, last ):
     try:

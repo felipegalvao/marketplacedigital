@@ -108,3 +108,10 @@ footer {
   background-color: #FC354C;
   color: #FFF;
 }
+
+/* Styles for Show Purchase Page */
+
+.table-arquivos-compra td {
+  width: 50%;
+  vertical-align: middle;
+}

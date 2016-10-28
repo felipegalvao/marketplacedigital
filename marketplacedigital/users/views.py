@@ -164,8 +164,8 @@ def show_purchase(request, purchase_id):
     if purchase.user != request.user:
         messages.warning(request, 'Você não tem permissão para acessar esta página.')
         return redirect('/')
-    purchase_sample_files = ProductFile.objects.filter(product=purchase.product, sample_file=True)
-    purchase_not_sample_files = ProductFile.objects.filter(product=purchase.product, sample_file=False)
+    purchase_sample_files = ProductFile.objects.filter(product=purchase.product, sample_file=True, approved=True)
+    purchase_not_sample_files = ProductFile.objects.filter(product=purchase.product, sample_file=False, approved=True)
     return render(request, 'users/show_purchase.html', { 'purchase': purchase, 'purchase_sample_files': purchase_sample_files,
                                                          'purchase_not_sample_files': purchase_not_sample_files })
 

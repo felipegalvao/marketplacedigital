@@ -4,22 +4,46 @@
 {% block page %}
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
         <h1>Compra - {{ purchase.product.name }}</h1>
-        <h3>Detalhes</h3>
-        <p><strong>Valor Pago:</strong> R$ {{ purchase.value }}</p>
-        <p><strong>Data da Compra:</strong> {{ purchase.time }}</p>
+        <h3>Detalhes:</h3>
+        <table class="table table-bordered table-striped">
+          <tr>
+            <td><strong>Produto:</strong></td>
+            <td><a href="{% url 'show_product' purchase.product.slug %}">{{ purchase.product.name }}</a></td>
+          </tr>
+          <tr>
+            <td><strong>Valor Pago:</strong></td>
+            <td>R$ {{ purchase.value }}</td>
+          </tr>
+          <tr>
+            <td><strong>Data da Compra:</strong></td>
+            <td>{{ purchase.time }}</td>
+          </tr>
+          <tr>
+            <td><strong>Status da Compra:</strong></td>
+            <td>{% if purchase.paid %}Pago{% else %}Pagamento em aprovação{% endif %}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8">
         <h2>Arquivos Disponíveis</h2>
 
         <p>Encontre abaixo os arquivos disponíveis para esta compra.</p>
 
         {% if purchase_not_sample_files %}
           <h3>Arquivos Finais</h3>
-          <table class="table table-responsive table-bordered table-striped">
+          <table class="table table-responsive table-bordered table-striped table-arquivos-compra">
             {% for file in purchase_not_sample_files %}
               <tr>
                 <td class="td-filename">{{ file.name }}</td>
-                <td class="text-center"><a href="{% url 'send_file' file.id %}">Baixar</a></td>
+                {% if purchase.paid %}
+                  <td class="text-center"><a href="{{ file.uploaded_file.url }}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Baixar</a></td>
+                {% else %}
+                  <td class="text-center">Pagamento em análise</td>
+                {% endif %}
               </tr>
             {% endfor %}
           </table>
@@ -28,11 +52,11 @@
         {% if purchase_sample_files %}
           <h3>Arquivos de Amostra</h3>
           <p>Se quiser dar uma olhadinha nos arquivos de amostra, eles estão logo abaixo:</p>
-          <table class="table table-responsive table-bordered table-striped">
+          <table class="table table-responsive table-bordered table-striped table-arquivos-compra">
             {% for file in purchase_sample_files %}
               <tr>
                 <td class="td-filename">{{ file.name }}</td>
-                <td class="text-center"><a href="{{ file.uploaded_file.url }}">Baixar</a></td>
+                <td class="text-center"><a href="{{ file.uploaded_file.url }}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Baixar</a></td>
               </tr>
             {% endfor %}
           </table>
