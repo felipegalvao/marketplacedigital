@@ -95,3 +95,8 @@ class ActivationLinkForm(forms.Form):
         message=t.render(c)
         #print unicode(message).encode('utf8')
         send_mail(datas['email_subject'], message, 'yourdomain <no-reply@yourdomain.com>', [datas['email']], fail_silently=False)
+
+class ProfileForm(forms.Form):
+    avatar = forms.ImageField(required=False)
+    about = forms.CharField(max_length=1000, widget=forms.Textarea(attrs={'class':'form-control'}), required=False)
+    payment_email = forms.EmailField(max_length=254, widget=forms.EmailInput(attrs={'class':'form-control'}), required=False)

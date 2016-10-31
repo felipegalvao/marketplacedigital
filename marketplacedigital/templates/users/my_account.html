@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+  <div class="container">
+    <h1>Minha conta</h1>
+    <ul>
+      <li><a href="{% url 'my_user_info' %}">Meus Dados</a></li>
+      <li><a href="{% url 'my_purchases' %}">Minhas Compras</a></li>
+      <li><a href="{% url 'my_sales' %}">Minhas Vendas</a></li>
+      <li><a href="#">Alterar Senha</a></li>
+    </ul>
+  </div>
+{% endblock %}

@@ -1,22 +1,35 @@
 /*
 --------------- Paleta de Cores ---------------
-Vermelho - #FC354C
-Cinza Escuro - #29221F
-Azul Petróleo - #13747D
-Azul Claro - #0ABFBC
-Bege Claro - #FCF7C5
+Laranja: #FF9900
+Cinza Escuro: #424242
+Cinza Claro: #E9E9E9
+Cinza: #BCBCBC
+Azul: #3299BB
 ------------ Fim da Paleta de Cores -----------
 
 
 /* --------------- Original Style for Bootstrap Theme ------------ */
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Work Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.navbar {
+  font-family: 'Open Sans', sans-serif;
+  margin-bottom: 0;
+}
+
+.navbar-inverse {
+  background-color: #424242;
+}
+
+.navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-brand {
+  color: #FF9900;
 }
 
 body {
-    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    font-family: 'Roboto', sans-serif;
+    /*padding-top: 50px;  Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    font-family: 'Montserrat', sans-serif;
 }
 
 .hero-spacer {
@@ -35,15 +48,6 @@ footer {
   width: 80%;
 }
 
-.navbar-inverse {
-  background-color: #13747D;
-
-}
-
-.navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-brand {
-  color: #FCF7C5;
-}
-
 .alert {
   margin-top: 20px;
 }
@@ -56,19 +60,19 @@ footer {
 
 .thumbnail-home {
   padding: 0;
-  background-color: #FCF7C5;
+  background-color: #E9E9E9;
 }
 
 .caption-home {
-  background-color: #FC354C;
+  background-color: #3299BB;
 }
 
 .h3-categorias {
-  background-color: #29221F;
-  color: #FCF7C5;
+  color: #424242;
   padding: 10px;
   font-size: 36px;
   margin-bottom: 30px;
+  border: 1px solid #424242;
 }
 
 .jumbotron h1 {
@@ -82,7 +86,12 @@ footer {
 }
 
 .fluid-home {
-  background-color: #FC354C;
+  background-image: url("/static/img/sativa.png");
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background-color: #E9E9E9;
+  font-weight: bold;
+  color: #424242;
 }
 
 .img-jumbotron-home {
@@ -90,6 +99,57 @@ footer {
   margin: auto;
 }
 
+.btn-cadastrar-home {
+  font-size: 36px;
+  margin: 30px 0 30px 0;
+  padding: 20px;
+  background-color: #FF9900;
+  border-color: #FF9900;
+  color: #424242;
+}
+
+.btn-cadastrar-home:hover, .btn-cadastrar-home:active {
+  background-color: #D98200;
+  border-color: #D98200;
+  color: #424242;
+}
+
+/* Styles for Show Category Page */
+
+.thumbnail-category a>img, .thumbnail-category>img {
+  padding: 15px;
+  height: 300px;
+}
+
+.thumbnail-category {
+  height: 450px;
+}
+
+.btn-show-product {
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+
+.span-product-price {
+  background-color: #FF9900;
+  padding: 10px;
+}
+
+.h4-title-product {
+  margin-top: 25px;
+}
+
+/* Styles for My Products Page */
+
+.thumbnail-my-products a>img, .thumbnail-my-products>img {
+  padding: 15px;
+  height: 300px;
+}
+
+.thumbnail-my-products {
+  height: 500px;
+}
 
 /* Styles for My Sales Page */
 
@@ -114,4 +174,41 @@ footer {
 .table-arquivos-compra td {
   width: 50%;
   vertical-align: middle;
+}
+
+
+/* Styles for Show Product Page */
+
+.panel-show-product {
+  margin-top: 20px;
+}
+
+.span-price-value {
+  font-size: 24px;
+  color: #FF9900;
+}
+
+.span-price-text {
+  font-size: 24px;
+  color: #424242;
+}
+
+.btn-buy {
+  font-size: 24px;
+  background-color: #FF9900;
+  padding: 15px;
+  border-color: #FF9900;
+}
+
+.btn-buy:hover {
+  background-color: #D98200;
+  border-color: #D98200;
+}
+
+.well-filelist h3 {
+  margin-top:0;
+}
+
+.well-filelist {
+  margin-top: 20px;
 }

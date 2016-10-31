@@ -16,19 +16,15 @@
     <div class="row text-center">
       {% for product in products %}
         <div class="col-md-3">
-          <div class="thumbnail">
-
+          <div class="thumbnail thumbnail-my-products">
               <img src="{{ product.photo.url }}" alt="">
               <div class="caption text-center">
-                <h3>{{ product.name }}</h3>
-                <a href="{% url 'show_product' product.slug %}">
-                  <button class="btn btn-default btn-success">Ver Mais</button>
-                </a>
+                <span class="span-product-price"><em>R$ {{ product.price }}</em></span>
+                <a href="{% url 'show_product' product.slug %}"><h4 class="h4-title-product">{{ product.name|slice:"50" }}</h4></a>
                 <a href="{% url 'my_product_admin' product.slug %}">
                   <button class="btn btn-default btn-success">Adicionar Produtos</button>
                 </a>
               </div>
-
           </div>
         </div>
       {% endfor %}

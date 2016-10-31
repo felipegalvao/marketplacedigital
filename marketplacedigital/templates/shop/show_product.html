@@ -3,40 +3,57 @@
 
 {% block page %}
   <div class="container">
-    <div class="panel panel-default">
-      <div class="panel-heading">
+    <div class="row">
+      <div class="col-md-12">
         <h1>{{ product.name }}</h1>
+        <hr>
       </div>
-      <div class="panel-body">
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <h3>Descrição</h3>
         <p>{{ product.description }}</p>
-        <p>R$ {{ product.price }}</p>
-        <p><img src="{{ product.photo.url }}" alt=""></p>
-        {% if product_files_sample %}
-          <h3>Arquivos de Amostra</h3>
-          <p>Uma pequena amostra do produto final, acessível para todos, para que você possa comprovar a sua qualidade.</p>
-          <ul>
-            {% for product_file in product_files_sample %}
-              <li><a href="{{ product_file.uploaded_file.url }}">{{ product_file.name }}</a></li>
-            {% endfor %}
-          </ul>
-        {% endif %}
-        {% if product_files_not_sample %}
-          <h3>Arquivos Finais</h3>
-          <p>Abaixo, a lista dos arquivos que você recebe ao adquirir este produto:</p>
-          <ul>
-            {% for product_file in product_files_not_sample %}
-              <li>{{ product_file.name }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+        <hr>
+        <p><span class="span-price-text">Preço:</span> <span class="span-price-value">R$ {{ product.price }}</span></p>
         {% if product_files_not_sample %}
           <a href="{% url 'product_purchase' product.slug %}">
-            <button class="btn btn-default btn-primary">Comprar</button>
+            <button class="btn btn-default btn-primary btn-buy">Comprar</button>
           </a>
         {% else %}
           <button class="btn btn-default btn-disabled">Comprar</button> - <em>Este produto ainda não possui arquivos finais aprovados.</em>
         {% endif %}
+        <div class="well well-filelist">
+          {% if product_files_sample %}
+
+            <h3>Arquivos de Amostra</h3>
+            <p>Uma pequena amostra do produto final, acessível para todos, para que você possa comprovar a sua qualidade.</p>
+            <ul>
+              {% for product_file in product_files_sample %}
+                <li><a href="{{ product_file.uploaded_file.url }}">{{ product_file.name }}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          {% if product_files_not_sample %}
+            <h3>Arquivos Finais</h3>
+            <p>Abaixo, a lista dos arquivos que você recebe ao adquirir este produto:</p>
+            <ul>
+              {% for product_file in product_files_not_sample %}
+                <li>{{ product_file.name }}</li>
+              {% endfor %}
+            </ul>
+
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <img src="{{ product.photo.url }}" alt="" class="img-responsive pull-right">
       </div>
     </div>
+
+    <p></p>
+
+
+
   </div>
 {% endblock %}

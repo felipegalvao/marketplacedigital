@@ -17,7 +17,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 
-from .forms import RegistrationForm, LoginForm, ActivationLinkForm
+from .forms import RegistrationForm, LoginForm, ActivationLinkForm, ProfileForm
 from .models import Profile
 from shop.models import Purchase, ProductFile
 from marketplacedigital.settings.base import BASE_DIR
@@ -34,7 +34,7 @@ from sendfile import sendfile
 def register(request):
     email_data = {}
     if request.user.is_authenticated():
-        messages.info('Você já está logado, não precisa fazer um novo cadastro.')
+        messages.info(request, 'Você já está logado, não precisa fazer um novo cadastro.')
         return redirect('/')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -67,6 +67,8 @@ def register(request):
             profile.key_expiration = (datetime.datetime.strftime(datetime.datetime.now() +
                 datetime.timedelta(days=7), "%Y-%m-%d %H:%M:%S"))
             profile.activated = False
+
+            profile.payment_email = user.email
 
             profile.save()
 
@@ -137,21 +139,56 @@ def activate(request, activation_key):
     return render(request, 'users/activation.html', locals())
 
 @login_required(login_url='/usuario/login/')
+def my_account(request):
+    return render(request, 'users/my_account.html', {})
+
+@login_required(login_url='/usuario/login/')
+def my_user_info(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            profile.about = form.cleaned_data['about']
+            if form.cleaned_data['avatar']:
+                profile.avatar = form.cleaned_data['avatar']            
+            profile.payment_email = form.cleaned_data['payment_email']
+            profile.save()
+            messages.success(request, "Dados editados com sucesso.")
+            return HttpResponseRedirect(reverse('my_account'))
+    else:
+        form = ProfileForm()
+
+    return render(request, 'users/my_user_info.html', { 'form':form, 'profile': profile })
+
+@login_required(login_url='/usuario/login/')
 def my_purchases(request):
     purchases = Purchase.objects.filter(user=request.user)
     return render(request, 'users/my_purchases.html', { 'purchases': purchases })
 
 @login_required(login_url='/usuario/login/')
 def my_sales(request):
-    # my_products = Product.objects.filter(user=request.user)
-    my_paid_sales = Purchase.objects.filter(product__user=request.user, paid=True)
+    year_filter = request.GET.get('year', "")
+    month_filter = request.GET.get('month', "")
+
+    years = range(2016,2027)
+    months = range(1,13)
+
+
+    if year_filter and month_filter:
+        my_paid_sales = Purchase.objects.filter(product__user=request.user, paid=True, time__month=month_filter, time__year=year_filter)
+        my_non_paid_sales = Purchase.objects.filter(product__user=request.user, paid=False, time__month=month_filter, time__year=year_filter)
+    else:
+        my_paid_sales = Purchase.objects.filter(product__user=request.user, paid=True, time__month=timezone.now().month, time__year=timezone.now().year)
+        my_non_paid_sales = Purchase.objects.filter(product__user=request.user, paid=False, time__month=timezone.now().month, time__year=timezone.now().year)
+
     total_paid_sales_value = my_paid_sales.aggregate(Sum('value'))['value__sum']
     total_paid_sales_commission = my_paid_sales.aggregate(Sum('seller_commission'))['seller_commission__sum']
 
-    my_non_paid_sales = Purchase.objects.filter(product__user=request.user, paid=False)
     total_non_paid_sales_value = my_non_paid_sales.aggregate(Sum('value'))['value__sum']
     total_non_paid_sales_commission = my_non_paid_sales.aggregate(Sum('seller_commission'))['seller_commission__sum']
-    return render(request, 'users/my_sales.html', { 'my_paid_sales': my_paid_sales,
+    return render(request, 'users/my_sales.html', { 'years': years,
+                                                    'months': months,
+                                                    'my_paid_sales': my_paid_sales,
                                                     'my_non_paid_sales': my_non_paid_sales,
                                                     'total_paid_sales_value': total_paid_sales_value,
                                                     'total_paid_sales_commission': total_paid_sales_commission,

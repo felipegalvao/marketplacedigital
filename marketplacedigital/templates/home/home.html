@@ -2,23 +2,51 @@
 {% load static %}
 
 {% block page %}
-  <!-- <div class="container-fluid fluid-home">
+  <div class="container-fluid fluid-home text-center">
     <div class="container">
       <div class="row">
-        <div class="col-md-7">
-          <h1>Marketbit, o marketplace de produtos digitais</h1>
+        <div class="col-md-2">
+          <img src="/static/img/open-book.png" alt="" class="img-responsive">
         </div>
-        <div class="col-md-5">
-          <img src="{% static 'img/creative-tree.png' %}" alt="" class="img-responsive">
+        <div class="col-md-2">
+          <img src="/static/img/spreadsheet-cell-row.png" alt="" class="img-responsive">
+        </div>
+        <div class="col-md-2">
+          <img src="/static/img/photo-camera.png" alt="" class="img-responsive">
+        </div>
+        <div class="col-md-2">
+          <img src="/static/img/insert-template.png" alt="" class="img-responsive">
+        </div>
+        <div class="col-md-2">
+          <img src="/static/img/headphones.png" alt="" class="img-responsive">
+        </div>
+        <div class="col-md-2">
+          <img src="/static/img/cube.png" alt="" class="img-responsive">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Linkplace - Marketplace de Produtos Digitais</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Compre e venda ebooks, templates para site, planilhas, fotos, áudio e muito mais, de um jeito rápido e fácil!</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <a href="{% url 'register' %}"><button class="btn btn-default btn-primary btn-cadastrar-home">Cadastrar</button></a>
+          <p>Cadastre-se agora e já coloque seus produtos digitais à venda, ou veja os produtos que já temos nas categorias abaixo!</p>
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <div class="container">
 
     <!-- Jumbotron Header -->
-    <header class="jumbotron hero-spacer">
+    <!-- <header class="jumbotron hero-spacer">
       <div class="row">
         <div class="col-md-7">
           <h1>Linkplace, o marketplace de produtos digitais</h1>
@@ -29,7 +57,7 @@
         </div>
       </div>
 
-    </header>
+    </header> -->
 
     <!-- Title -->
     <div class="row">
@@ -43,7 +71,7 @@
     <div class="row text-center">
       <a name="categorias">
       {% for category in categories %}
-        <div class="col-md-3 col-sm-6 hero-feature">
+        <div class="col-md-2">
           <div class="thumbnail thumbnail-home">
             <a href="{% url 'show_category' category.slug %}">
               <img src="{{ category.photo.url }}" alt="">
