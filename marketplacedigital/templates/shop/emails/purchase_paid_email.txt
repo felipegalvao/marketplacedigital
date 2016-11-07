@@ -1,0 +1,12 @@
+Linkplace - Pagamento aprovado para sua compra
+
+Olá, {{ purchase.user.first_name }}!
+
+O pagamento para sua compra foi confirmado, e agora você já pode acessar seus arquivos. Mais detalhes sobre sua compra abaixo:
+
+Produto: {{ purchase.product.name }}
+Valor: {{ purchase.value }}
+Feita em: {{ purchase.time }}
+
+Para acessar seus arquivos, vá até a opção Suas Compras no nosso site, onde haverá um link para baixar os arquivos que compõe este produto. Para acessar diretamente esta opção, clique no link abaixo:
+{{ my_purchases_link }}

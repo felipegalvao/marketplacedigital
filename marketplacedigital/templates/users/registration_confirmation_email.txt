@@ -1,0 +1,10 @@
+Registro confirmado no Linkplace
+
+Olá! Sua conta no Linkplace já está ativada. Agora você já pode vender e comprar produtos digitais.
+
+Se for vender, não esqueça de confirmar o seu email para pagamento pelo Pagseguro, acessando o link abaixo:
+{{ account_link }}
+
+Qualquer dúvida, basta entrar em contato, que estaremos prontos para responder o mais rápido possível
+
+Abraços

@@ -1,0 +1,16 @@
+Linkplace - Compra realizada
+
+Olá, {{ purchase.user.first_name }}
+
+Sua compra no Linkplace foi confirmada. Agora, basta aguardar a confirmação do seu pagamento para liberarmos o acesso ao seu produto.
+
+Não se preocupe, assim que o pagamento for confirmado, enviaremos outro email confirmando. Abaixo, segue um resumo do seu pedido:
+
+Produto: {{ purchase.product.name }}
+Valor: {{ purchase.value }}
+Feita em: {{ purchase.time }}
+
+Caso queira acessar a página de suas compras para acompanhar com maiores detalhes, o link está logo abaixo:
+{{ my_purchases_link }}
+
+Abraços!

@@ -9,13 +9,12 @@
       {% if products %}
         {% for product in products %}
           <div class="col-md-3">
-            <div class="thumbnail">
+            <div class="thumbnail thumbnail-category">
               <a href="{% url 'show_product' product.slug %}">
                 <img src="{{ product.photo.url }}" alt="">
                 <div class="caption text-center">
-                  <h3>{{ product.name }}</h3>
-                  <p><em>R$ {{ product.price }}</em></p>
-                  <button class="btn btn-default btn-success">Ver Mais</button>
+                  <span class="span-product-price"><em>R$ {{ product.price }}</em></span>
+                  <h4 class="h4-title-product">{{ product.name|slice:"50" }}</h4>
                 </div>
               </a>
             </div>

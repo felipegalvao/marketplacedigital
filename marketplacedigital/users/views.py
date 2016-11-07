@@ -132,6 +132,7 @@ def activate(request, activation_key):
         else: #Activation successful
             profile.activated = True
             profile.save()
+            send_registration_confirmation_email(profile.user)
 
     #If user is already active, simply display error message
     else:
@@ -150,7 +151,7 @@ def my_user_info(request):
         if form.is_valid():
             profile.about = form.cleaned_data['about']
             if form.cleaned_data['avatar']:
-                profile.avatar = form.cleaned_data['avatar']            
+                profile.avatar = form.cleaned_data['avatar']
             profile.payment_email = form.cleaned_data['payment_email']
             profile.save()
             messages.success(request, "Dados editados com sucesso.")
@@ -216,51 +217,6 @@ def send_file(request, file_id):
         messages.warning(request, 'Você não tem permissão para acessar este arquivo. Adquira-o primeiro.')
         return HttpResponseRedirect(reverse('show_product', args=(product_file.product.slug,)))
 
-@csrf_exempt
-def notificacao_pagseguro(request):
-    if request.method == 'POST':
-        request.encoding = 'ISO-8859-1'
-        notification_code = request.POST['notificationCode']
-        notification_type = request.POST['notificationType']
-
-        dados_consulta = {
-            "email": settings_secrets.PAGSEGURO_EMAIL,
-            "token": settings_secrets.PAGSEGURO_TOKEN_SANDBOX
-        }
-
-        request_link = "https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/" + notification_code
-
-        r = requests.get(request_link, params=dados_consulta)
-        r_texto = r.text
-
-        purchase_id = find_between(r_texto, "<reference>","</reference>")
-        transaction_status = find_between(r_texto, "<status>","</status>")
-
-        purchase = Purchase.objects.get(pk=int(purchase_id))
-        if transaction_status == "3":
-            purchase.paid = True
-            purchase.save()
-
-            email_subject = "Linkplace - Olá " + user.first_name + ". Seu pagamento foi confirmado."
-            from_email = "felipect86@gmail.com"
-            to_email = user.email
-
-            text_template = get_template('users/payment_confirmation.txt')
-            html_template = get_template('users/payment_confirmation.html')
-
-            d = Context({ 'purchase': purchase })
-
-            text_content = text_template.render(d)
-            html_content = html_template.render(d)
-
-            msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
-
-        return HttpResponse('OK')
-    else:
-        return redirect('/')
-
 def resend_activation_email(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -304,7 +260,7 @@ def send_activation_email(user, profile):
     link = 'usuario/ativar/' + profile.activation_key
     activation_link = domain + link
 
-    email_subject = "Olá " + user.first_name + ". Ative sua conta no Marketplace Digital"
+    email_subject = "Olá " + user.first_name + ". Ative sua conta no Linkplace"
     from_email = "felipect86@gmail.com"
     to_email = user.email
 
@@ -312,6 +268,27 @@ def send_activation_email(user, profile):
     html_template = get_template('users/activation_email.html')
 
     d = Context({ 'username': user.username, 'activation_link': activation_link, 'key_expiration': profile.key_expiration })
+
+    text_content = text_template.render(d)
+    html_content = html_template.render(d)
+
+    msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+def send_registration_confirmation_email(user):
+    domain = settings.BASE_DOMAIN
+    link = 'usuario/minha_conta/meus_dados/'
+    account_link = domain + link
+
+    email_subject = "Olá " + user.first_name + ". Sua conta no Linkplace foi ativada"
+    from_email = "felipect86@gmail.com"
+    to_email = user.email
+
+    text_template = get_template('users/registration_confirmation_email.txt')
+    html_template = get_template('users/registration_confirmation_email.html')
+
+    d = Context({ 'username': user.username, 'account_link': account_link })
 
     text_content = text_template.render(d)
     html_content = html_template.render(d)

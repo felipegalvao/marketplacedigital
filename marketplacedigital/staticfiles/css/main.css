@@ -52,6 +52,10 @@ footer {
   margin-top: 20px;
 }
 
+hr {
+  border-color: #FF9900;
+}
+
 /* Style for Home Page */
 
 .thumbnail a>img, .thumbnail>img {
@@ -123,6 +127,7 @@ footer {
 
 .thumbnail-category {
   height: 450px;
+  border: 2px solid #3299BB;
 }
 
 .btn-show-product {
@@ -211,4 +216,8 @@ footer {
 
 .well-filelist {
   margin-top: 20px;
+}
+
+.img-product {
+  max-height: 350px;
 }

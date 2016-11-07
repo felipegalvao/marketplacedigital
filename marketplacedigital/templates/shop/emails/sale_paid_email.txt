@@ -1,0 +1,17 @@
+Linkplace - Pagamento confirmado para sua venda
+
+Olá, {{ purchase.product.user.first_name }}!
+
+O pagamento para sua venda acaba de ser confirmado no Linkplace.
+
+Mais detalhes sobre a venda abaixo:
+
+Produto: {{ purchase.product.name }}
+Valor: {{ purchase.value }}
+Venda feita em: {{ purchase.time }}
+Sua Comissão: {{ purchase.seller_commission }}
+
+Se quiser acompanhar suas vendas com maiores detalhes, clique abaixo:
+{{ my_sales_link }}
+
+Abraços!

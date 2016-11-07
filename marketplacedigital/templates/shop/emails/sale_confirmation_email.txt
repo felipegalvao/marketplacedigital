@@ -1,0 +1,17 @@
+Linkplace - Venda realizada
+
+Olá, {{ purchase.product.user.first_name }}!
+
+Você acaba de realizar uma venda no Linkplace. A confirmação da venda ainda depende da aprovação do pagamento, mas não se preocupe, pois assim que o pagamento for confirmado, enviaremos outro email para lhe avisar.
+
+Mais detalhes sobre a venda abaixo:
+
+Produto: {{ purchase.product.name }}
+Valor: {{ purchase.value }}
+Venda feita em: {{ purchase.time }}
+Sua Comissão: {{ purchase.seller_commission }}
+
+Se quiser acompanhar suas vendas com maiores detalhes, clique abaixo:
+{{ my_sales_link }}
+
+Abraços!

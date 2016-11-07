@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'produtos/(?P<product_slug>[\w|-]+)/comprar/$', views.product_purchase, name='product_purchase'),
     url(r'produtos/(?P<product_slug>[\w|-]+)/fechar_compra/$', views.purchase_confirmation, name='purchase_confirmation'),
     url(r'produtos/(?P<product_slug>[\w|-]+)/$', views.show_product, name='show_product'),
+    url(r'compras/notificacao_pagseguro/$', views.notificacao_pagseguro, name='notificacao_pagseguro'),
 ]

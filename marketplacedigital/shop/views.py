@@ -4,9 +4,17 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+
+# Imports for email sending
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
 
 from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
+from users.models import Profile
 from marketplacedigital.settings.project_utils import calculate_seller_commission
 
 import requests
@@ -22,6 +30,7 @@ def show_category(request, category_slug):
 def show_product(request, product_slug):
     '''Show product details'''
     product = Product.objects.get(slug=product_slug)
+    profile = Profile.objects.get(user=product.user)
     product_files_sample = product.files.filter(sample_file=True, approved=True)
     product_files_not_sample = product.files.filter(sample_file=False, approved=True)
     if not product_files_not_sample:
@@ -30,7 +39,8 @@ def show_product(request, product_slug):
     product_files = product.files.all()
     return render(request, 'shop/show_product.html', { 'product': product, 'product_files_sample': product_files_sample,
                                                        'product_files_not_sample': product_files_not_sample,
-                                                       'product_files': product_files})
+                                                       'product_files': product_files,
+                                                       'profile': profile})
 
 @login_required(login_url='/usuario/login/')
 def create_product(request):
@@ -108,6 +118,9 @@ def purchase_confirmation(request, product_slug):
                         seller_commission=calculate_seller_commission(product.price))
     purchase.save()
 
+    purchase_confirmation_email(purchase)
+    sale_confirmation_email(purchase)
+
     dados_pagamento = {
         "email":"felipect86@gmail.com",
         "token":"A90C580ABDB1475296FCCDED71E91C04",
@@ -135,6 +148,37 @@ def purchase_confirmation(request, product_slug):
     messages.success(request, 'Sua compra foi concluída. Assim que seu pagamento for aprovado, você será notificado e poderá acessar os seus arquivos.')
     return redirect('/')
 
+@csrf_exempt
+def notificacao_pagseguro(request):
+    if request.method == 'POST':
+        request.encoding = 'ISO-8859-1'
+        notification_code = request.POST['notificationCode']
+        notification_type = request.POST['notificationType']
+
+        dados_consulta = {
+            "email": settings_secrets.PAGSEGURO_EMAIL,
+            "token": settings_secrets.PAGSEGURO_TOKEN_SANDBOX
+        }
+
+        request_link = "https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/" + notification_code
+
+        r = requests.get(request_link, params=dados_consulta)
+        r_texto = r.text
+
+        purchase_id = find_between(r_texto, "<reference>","</reference>")
+        transaction_status = find_between(r_texto, "<status>","</status>")
+
+        purchase = Purchase.objects.get(pk=int(purchase_id))
+        if transaction_status == "3":
+            purchase.paid = True
+            purchase.save()
+
+            purchase_paid_email(purchase)
+            sale_paid_email(purchase)
+        return HttpResponse('OK')
+    else:
+        return redirect('/')
+
 def search_products(request):
     search_string = request.GET.get('q', "")
     if search_string:
@@ -150,3 +194,71 @@ def find_between( s, first, last ):
         return s[start:end]
     except ValueError:
         return ""
+
+def purchase_confirmation_email(purchase):    
+    link = 'usuario/minhas_compras/'
+    my_purchases_link = settings.BASE_DOMAIN + link
+
+    email_subject = "Linkplace - Sua compra foi realizada"    
+    to_email = purchase.user.email
+
+    template_name = 'purchase_confirmation_email'
+
+    context = { 'purchase': purchase, 'my_purchases_link': my_purchases_link }
+
+    send_transaction_email(email_subject, template_name, context, to_email)
+    
+
+def sale_confirmation_email(purchase):    
+    link = 'usuario/minhas_vendas/'
+    my_sales_link = settings.BASE_DOMAIN + link
+
+    email_subject = "Linkplace - Você acaba de realizar uma venda"    
+    to_email = purchase.product.user.email
+
+    template_name = 'sale_confirmation_email'    
+
+    context = { 'purchase': purchase, 'my_sales_link': my_sales_link }
+
+    send_transaction_email(email_subject, template_name, context, to_email)
+
+def purchase_paid_email(purchase):    
+    link = 'usuario/minhas_compras/'
+    my_purchases_link = settings.BASE_DOMAIN + link
+
+    email_subject = "Linkplace - O pagamento para sua compra foi confirmado"
+    to_email = purchase.user.email
+
+    template_name = 'purchase_paid_email'
+
+    context = { 'purchase': purchase, 'my_purchases_link': my_purchases_link }
+
+    send_transaction_email(email_subject, template_name, context, to_email)
+
+def sale_paid_email(purchase):
+    link = 'usuario/minhas_vendas/'
+    my_sales_link = settings.BASE_DOMAIN + link
+
+    email_subject = "Linkplace - O pagamento para sua venda foi confirmado."
+    to_email = purchase.product.user.email
+
+    template_name = 'sale_paid_email'
+
+    context = { 'purchase': purchase, 'my_sales_link': my_sales_link }
+
+    send_transaction_email(email_subject, template_name, context, to_email)
+
+def send_transaction_email(email_subject, template_name, context, to_email):    
+    from_email = "felipect86@gmail.com"    
+
+    text_template = get_template('shop/emails/' + template_name + '.txt')
+    html_template = get_template('shop/emails/' + template_name + '.html')
+
+    d = Context(context)
+
+    text_content = text_template.render(d)
+    html_content = html_template.render(d)
+
+    msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
