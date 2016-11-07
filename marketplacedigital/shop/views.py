@@ -16,6 +16,7 @@ from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
 from users.models import Profile
 from marketplacedigital.settings.project_utils import calculate_seller_commission
+from marketplacedigital.settings import settings_secrets
 
 import requests
 
