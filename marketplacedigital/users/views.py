@@ -31,20 +31,10 @@ import datetime
 import requests
 from sendfile import sendfile
 
-def register(request):
-    email_data = {}
-    if request.user.is_authenticated():
-        messages.info(request, 'Você já está logado, não precisa fazer um novo cadastro.')
-        return redirect('/')
+def register(request):    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            print('Form is valid')
-            #datas['email_path']="/ActivationEmail.txt"
-            email_data['email_subject']= "Ative sua conta - Marketplace Digital"
-            # form.sendEmail(datas)
-
-
             user = User.objects.create_user(username=form.cleaned_data['username'],
                                             email=form.cleaned_data['email'],
                                             password=form.cleaned_data['password1'],
@@ -60,8 +50,8 @@ def register(request):
             complete_salt = salt + usernamesalt
             complete_salt = complete_salt.encode('utf8')
 
-            print(complete_salt)
-
+            # Get the profile of this User, set the activation key field to the value created above
+            # and set the key expiration date to 7 days from current date
             profile = Profile.objects.get(user=user)
             profile.activation_key = hashlib.sha1(complete_salt).hexdigest()
             profile.key_expiration = (datetime.datetime.strftime(datetime.datetime.now() +
@@ -69,34 +59,34 @@ def register(request):
             profile.activated = False
 
             profile.payment_email = user.email
-
             profile.save()
 
+            # Send email with activation link to user
             send_activation_email(user, profile)
 
+            # Set a message notifying the user about the email
             messages.info(request, 'Um email com um link de ativação foi enviado para ' + user.email + '. Ative sua conta para fazer login.')
 
             return redirect('/')
     else:
-        form = RegistrationForm() #Display form with error messages (incorrect fields, etc)
-        print(form.errors)
+        if request.user.is_authenticated():
+            messages.info(request, 'Você já está logado, não precisa fazer um novo cadastro.')
+            return redirect('/')
+        form = RegistrationForm() #Display form with error messages (incorrect fields, etc)        
     return render(request, 'users/register.html', locals())
 
 def user_login(request):
     username = password = ''
-    if request.method == 'POST':
-        print('request POST')
+    if request.method == 'POST':        
         form = LoginForm(request.POST)
-        if form.is_valid():
-            print('form valido')
+        if form.is_valid():            
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
             user = authenticate(username=username, password=password)
             print(user)
             if user is not None:
-                profile = Profile.objects.get(user=user)
-                print(profile)
+                profile = Profile.objects.get(user=user)                
                 if profile.activated:
                     login(request, user)
                     if request.POST.get('next'):
@@ -106,10 +96,7 @@ def user_login(request):
                 else:
                     form.add_error(None, 'Esta conta ainda não foi ativada. Caso não tenha recebido o email de ativação, clique no link abaixo.')
             else:
-                form.add_error(None, 'Usuário e senha não conferem. Favor inserir uma combinação válida.')
-        else:
-            print('form invalido')
-            print(form.errors)
+                form.add_error(None, 'Usuário e senha não conferem. Favor inserir uma combinação válida.')        
     else:
         form = LoginForm()
 

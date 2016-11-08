@@ -85,7 +85,7 @@ DATABASES = {
         "PASSWORD": settings_secrets.DB_PASSWORD,
         "HOST": "localhost",
         "PORT": "",
-    }
+    }    
 }
 
 
