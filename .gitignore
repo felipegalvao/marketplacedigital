@@ -15,3 +15,5 @@ tests/report/
 marketplacedigital/marketplacedigital/settings.py
 marketplacedigital/marketplacedigital/settings/settings_secrets.py
 media
+db.sqlite3
+marketplacedigital/geckodriver.log

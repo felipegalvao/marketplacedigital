@@ -249,7 +249,7 @@ def sale_paid_email(purchase):
 
     send_transaction_email(email_subject, template_name, context, to_email)
 
-def send_transaction_email(email_subject, template_name, context, to_email):    
+def send_transaction_email(email_subject, template_name, context, to_email):
     from_email = "felipect86@gmail.com"    
 
     text_template = get_template('shop/emails/' + template_name + '.txt')

@@ -12,3 +12,4 @@ requests-oauthlib==0.7.0
 whitenoise==3.2.2
 dj-database-url==0.4.0
 psycopg2==2.6.1
+selenium==3.0.1
