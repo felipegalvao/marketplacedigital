@@ -23,7 +23,7 @@ import requests
 def show_category(request, category_slug):
     '''Show all products from a Category'''
     category = Category.objects.get(slug=category_slug)
-    category_products = Product.objects.filter(category=category, approved=True, files__isnull=False)
+    category_products = Product.objects.filter(category=category, approved=True)
 
     return render(request, 'shop/show_category.html', { 'category_products' : category_products,
                                                         'category': category })
