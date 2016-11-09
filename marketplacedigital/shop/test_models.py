@@ -18,10 +18,15 @@ class ShopTestMommy(TestCase):
         self.assertEqual(new_product.__str__(), new_product.name)
 
     def test_product_file_creation_mommy(self):
-        new_product_file = mommy.make(ProductFile)
+        new_product_file_sample = mommy.make(ProductFile, sample_file=True)
+        new_product_file_not_sample = mommy.make(ProductFile, sample_file=False)
 
-        self.assertTrue(isinstance(new_product_file, ProductFile))
-        self.assertEqual(new_product_file.__str__(), new_product_file.product.name + " - " + new_product_file.name)
+        self.assertTrue(isinstance(new_product_file_sample, ProductFile))
+        self.assertEqual(new_product_file_sample.__str__(), new_product_file_sample.product.name + " - " + new_product_file_sample.name)
+
+        self.assertIn('user_uploaded/protected', new_product_file_not_sample.uploaded_file.path)
+        self.assertIn('user_uploaded/sample', new_product_file_sample.uploaded_file.path)
+    
 
     def test_purchase_creation_mommy(self):
         new_purchase = mommy.make(Purchase)

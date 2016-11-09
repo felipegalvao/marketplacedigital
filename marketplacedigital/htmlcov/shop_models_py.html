@@ -8,7 +8,7 @@
     
     
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for shop/models.py: 98%</title>
+    <title>Coverage for shop/models.py: 100%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -24,15 +24,15 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>shop/models.py</b> :
-            <span class="pc_cov">98%</span>
+            <span class="pc_cov">100%</span>
         </h1>
 
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
             46 statements &nbsp;
-            <span class="run hide_run shortkey_r button_toggle_run">45 run</span>
-            <span class="mis shortkey_m button_toggle_mis">1 missing</span>
+            <span class="run hide_run shortkey_r button_toggle_run">46 run</span>
+            <span class="mis shortkey_m button_toggle_mis">0 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -100,7 +100,7 @@
 <p id="n31" class="stm run hide_run"><a href="#n31">31</a></p>
 <p id="n32" class="pln"><a href="#n32">32</a></p>
 <p id="n33" class="stm run hide_run"><a href="#n33">33</a></p>
-<p id="n34" class="stm mis"><a href="#n34">34</a></p>
+<p id="n34" class="stm run hide_run"><a href="#n34">34</a></p>
 <p id="n35" class="pln"><a href="#n35">35</a></p>
 <p id="n36" class="stm run hide_run"><a href="#n36">36</a></p>
 <p id="n37" class="pln"><a href="#n37">37</a></p>
@@ -160,7 +160,7 @@
 <p id="t31" class="stm run hide_run"><span class="key">def</span> <span class="nam">user_directory_path</span><span class="op">(</span><span class="nam">instance</span><span class="op">,</span> <span class="nam">filename</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t32" class="pln">    <span class="com"># file will be uploaded to MEDIA_ROOT/user_&lt;id>/&lt;filename></span><span class="strut">&nbsp;</span></p>
 <p id="t33" class="stm run hide_run">    <span class="key">if</span> <span class="nam">instance</span><span class="op">.</span><span class="nam">sample_file</span> <span class="op">==</span> <span class="key">True</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t34" class="stm mis">        <span class="key">return</span> <span class="str">'user_uploaded/sample/{0}/{1}/{2}'</span><span class="op">.</span><span class="nam">format</span><span class="op">(</span><span class="nam">instance</span><span class="op">.</span><span class="nam">product</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">id</span><span class="op">,</span> <span class="nam">instance</span><span class="op">.</span><span class="nam">product</span><span class="op">.</span><span class="nam">id</span><span class="op">,</span> <span class="nam">filename</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t34" class="stm run hide_run">        <span class="key">return</span> <span class="str">'user_uploaded/sample/{0}/{1}/{2}'</span><span class="op">.</span><span class="nam">format</span><span class="op">(</span><span class="nam">instance</span><span class="op">.</span><span class="nam">product</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">id</span><span class="op">,</span> <span class="nam">instance</span><span class="op">.</span><span class="nam">product</span><span class="op">.</span><span class="nam">id</span><span class="op">,</span> <span class="nam">filename</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t35" class="pln">    <span class="key">else</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t36" class="stm run hide_run">        <span class="key">return</span> <span class="str">'user_uploaded/protected/{0}/{1}/{2}'</span><span class="op">.</span><span class="nam">format</span><span class="op">(</span><span class="nam">instance</span><span class="op">.</span><span class="nam">product</span><span class="op">.</span><span class="nam">user</span><span class="op">.</span><span class="nam">id</span><span class="op">,</span> <span class="nam">instance</span><span class="op">.</span><span class="nam">product</span><span class="op">.</span><span class="nam">id</span><span class="op">,</span> <span class="nam">filename</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t37" class="pln"><span class="strut">&nbsp;</span></p>
@@ -194,7 +194,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.2</a>,
-            created at 2016-11-08 18:43
+            created at 2016-11-08 19:25
         </p>
     </div>
 </div>
