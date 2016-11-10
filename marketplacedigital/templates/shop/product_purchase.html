@@ -3,9 +3,67 @@
 
 {% block page %}
   <div class="container">
-    <h1>Comprar - {{ product.name }}</h1>
-    <p>Preencha o formulário abaixo com seus dados de pagamento para confirmar a compra.</p>
-    <p><a href="{% url 'show_product' product.slug %}">{{ product.name }}</a></p>
-    <a href="{% url 'purchase_confirmation' product.slug %}"><button class="btn btn-default btn-primary">Completar Compra</button></a>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Confirmar Comprar - {{ product.name }}</h1>
+            <p>Reveja os detalhes da sua compra e então clique no botão abaixo para confirmar sua compra. Você será redirecionado para o Pagseguro para fazer seu pagamento.</p>        
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td class="td-confirmacompra-col1"><strong>Produto</strong></td>
+                    <td><a href="{% url 'show_product' product.slug %}">{{ product.name }}</a></td>
+                </tr>
+                {% if product.pay_what_you_want == False %}
+                    <tr>
+                        <td class="td-confirmacompra-col1"><strong>Valor</strong></td>
+                        <td>R$ {{ product.price }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+            {% if product.pay_what_you_want %}
+            <p>Defina abaixo o valor que irá pagar pelo produto. O valor mínimo é de <strong>R$ {{ product.minimum_value }}</strong></p>           
+                <form class="form-inline" action="{% url 'purchase_confirmation' product.slug %}" method="GET">
+                    <div class="form-group">
+                        <label for="value">Valor a pagar: R$</label>
+                        <input type="number" id="value" name="value" class="form-control" value="{{ product.minimum_value }}" min="{{ product.minimum_value }}" max="{{ product.maximum_value }}">
+                    </div>
+                    <br />
+                    <br />
+                    <input type="image" src="{% static 'img/botao_pagseguro.jpg' %}" alt="Completar Compra" />                    
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Lista de Arquivos</h3>
+            <ul>
+                {% for product_file in product_files %}
+                    <li>{{ product_file.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>    
+    
+    <br />
+
+    {% if not product.pay_what_you_want %}
+      <div class="row">
+          <div class="col-md-12">
+              <a href="{% url 'purchase_confirmation' product.slug %}"><img src="{% static 'img/botao_pagseguro.jpg' %}"></a>        
+          </div>
+      </div>
+    {% endif %}
+    
   </div>
+
+  <script type="text/javascript">
+    function updateTextInput(val) {
+      document.getElementById('textInput').value=val; 
+    }
+  </script>
 {% endblock %}

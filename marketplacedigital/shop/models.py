@@ -28,6 +28,12 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def minimum_value(self):
+        return(int(self.price))
+
+    def maximum_value(self):
+        return(int(self.price * 5))
+
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     if instance.sample_file == True:

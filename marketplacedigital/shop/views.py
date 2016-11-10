@@ -19,6 +19,7 @@ from marketplacedigital.settings.project_utils import calculate_seller_commissio
 from marketplacedigital.settings import settings_secrets
 
 import requests
+from decimal import Decimal
 
 def show_category(request, category_slug):
     '''Show all products from a Category'''
@@ -96,6 +97,10 @@ def my_products(request):
 @login_required(login_url='/usuario/login/')
 def product_purchase(request, product_slug):
     product = Product.objects.get(slug=product_slug)
+    product_files = ProductFile.objects.filter(product=product)
+
+    min_value = int(product.price)
+    max_value = int(product.price * 10)
 
     purchase = Purchase.objects.filter(user=request.user, product=product)
     if purchase:
@@ -106,15 +111,22 @@ def product_purchase(request, product_slug):
         messages.warning(request, 'Este produto é seu, você não precisa comprá-lo.')
         return redirect('/')
 
-    return render(request, 'shop/product_purchase.html', { 'product': product })
+    return render(request, 'shop/product_purchase.html', { 'product': product, 'product_files': product_files,
+                                                           'min_value': min_value, 'max_value': max_value })
 
 @login_required(login_url='/usuario/login/')
 def purchase_confirmation(request, product_slug):
     product = Product.objects.get(slug=product_slug)
 
+    value_to_pay = request.GET.get('value', "")
+    if not value_to_pay:
+        value_to_pay = product.price
+    else:
+        value_to_pay = float(value_to_pay)
+
     purchase = Purchase(user = request.user,
                         product = product,
-                        value = product.price,
+                        value = value_to_pay,
                         paid = False,
                         seller_commission=calculate_seller_commission(product.price))
     purchase.save()
@@ -131,7 +143,7 @@ def purchase_confirmation(request, product_slug):
         "senderEmail": str(request.user.email),
         "itemId1" : "001",
         "itemDescription1" : "Pagamento do produto - " + product.name,
-        "itemAmount1" : str(product.price),
+        "itemAmount1" : "{0:.2f}".format(value_to_pay),        
         "itemQuantity1" : "1",
     }
 
