@@ -10,10 +10,10 @@
       {% if category_products %}
         {% for product in category_products %}
           <div class="col-md-3">
-            <div class="thumbnail thumbnail-category">
+            <div class="thumbnail thumbnail-product">
               <a href="{% url 'show_product' product.slug %}">
                 <img src="{{ product.photo.url }}" alt="">
-                <div class="caption text-center">
+                <div class="caption text-center caption-product">
                   <span class="span-product-price"><em>R$ {{ product.price }}</em></span>
                   <h4 class="h4-title-product">{{ product.name|slice:"50" }}</h4>
                 </div>

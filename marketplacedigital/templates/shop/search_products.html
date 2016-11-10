@@ -9,7 +9,7 @@
       {% if products %}
         {% for product in products %}
           <div class="col-md-3">
-            <div class="thumbnail thumbnail-category">
+            <div class="thumbnail thumbnail-product">
               <a href="{% url 'show_product' product.slug %}">
                 <img src="{{ product.photo.url }}" alt="">
                 <div class="caption text-center">

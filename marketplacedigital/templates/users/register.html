@@ -18,7 +18,7 @@
     <hr>
 
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <form method="POST">
           {% csrf_token %}
 
@@ -74,6 +74,19 @@
         </form>
 
         <p>Já está cadastrado? <a href="{% url 'user_login' %}">Clique aqui para fazer login.</a></p>
+      </div>
+
+      <div class="col-md-1"></div>
+
+      <div class="col-md-6">
+        <h3>Por que se cadastrar?</h3>
+        <ul class="list-group">
+          <li class="list-group-item"><strong class="strong-porqueregistrar">Os direitos são seus</strong> - Pode colocar seus produtos para vender em qualquer outro lugar que quiser.</li>
+          <li class="list-group-item"><strong class="strong-porqueregistrar">Comissão baixa</strong> - Você não paga nada para colocar seu produto aqui, e nossa comissão é só de 15% mais R$ 0,50</li>
+          <li class="list-group-item"><strong class="strong-porqueregistrar">Produtos de Qualidade</strong> - Prezamos pela qualidade dos produtos. Nada de cópias, produtos piratas etc</li>
+          <li class="list-group-item"><strong class="strong-porqueregistrar">Facilidade</strong> - Tanto para compradores quanto para vendedores, o processo é muito simples e rápido.</li>
+        </ul>
+        
       </div>
     </div>
 

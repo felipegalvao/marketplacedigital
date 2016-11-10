@@ -67,9 +67,10 @@ hr {
   background-color: #E9E9E9;
 }
 
-.caption-home {
-  background-color: #3299BB;
+.thumbnail .caption-home {
+  background-color: #424242;
   height: 100px;
+  color: #FFF;
 }
 
 .h3-categorias {
@@ -121,14 +122,19 @@ hr {
 
 /* Styles for Show Category Page */
 
-.thumbnail-category a>img, .thumbnail-category>img {
+.thumbnail-product a>img, .thumbnail-product>img {
   padding: 15px;
   height: 300px;
 }
 
-.thumbnail-category {
+.thumbnail-product {
   height: 450px;
-  border: 2px solid #3299BB;
+  background-color: #E9E9E9;
+}
+
+.caption-product {
+  padding: 0;  
+  font-size: 16px;
 }
 
 .btn-show-product {
@@ -137,9 +143,12 @@ hr {
   padding: 0;
 }
 
+
+
 .span-product-price {
   background-color: #FF9900;
   padding: 10px;
+  display: block;
 }
 
 .h4-title-product {
@@ -204,6 +213,7 @@ hr {
   background-color: #FF9900;
   padding: 15px;
   border-color: #FF9900;
+  width: 100%;
 }
 
 .btn-buy:hover {
@@ -216,15 +226,26 @@ hr {
 }
 
 .well-filelist {
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 .img-product {
   max-height: 350px;
+  margin-top: 20px;
+}
+
+.p-about-author {
+  text-align: justify;
 }
 
 /* Styles for Purchase Confirmation Page */
 
 .td-confirmacompra-col1 {
   width: 30%;
+}
+
+/* Styles for Register Page */
+
+.strong-porqueregistrar {
+  color: #3299BB;
 }
