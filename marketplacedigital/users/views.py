@@ -242,6 +242,15 @@ def find_between( s, first, last ):
     except ValueError:
         return ""
 
+@login_required(login_url='/usuario/login/')
+def pay_purchase(request, purchase_id):
+    purchase = Purchase.objects.get(pk=purchase_id)
+    if purchase.paid:
+        messages.info(request, 'Esta compra já está paga.')
+        return redirect('/')   
+
+    return redirect('https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=' + purchase.payment_code)
+
 def send_activation_email(user, profile):
     domain = settings.BASE_DOMAIN
     link = 'usuario/ativar/' + profile.activation_key

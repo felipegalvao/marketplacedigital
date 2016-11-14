@@ -22,9 +22,12 @@
           </tr>
           <tr>
             <td><strong>Status da Compra:</strong></td>
-            <td>{% if purchase.paid %}Pago{% else %}Pagamento em aprovação{% endif %}</td>
+            <td>{% if purchase.paid %}Pago{% else %}Pagamento ainda não confirmado{% endif %}</td>
           </tr>
         </table>
+        {% if not purchase.paid %}
+          <a href="{% url 'pay_purchase' purchase.id %}"><img src="{% static 'img/botao_pagseguro.jpg' %}"></a>
+        {% endif %}
       </div>
     </div>
     <div class="row">
@@ -42,7 +45,7 @@
                 {% if purchase.paid %}
                   <td class="text-center"><a href="{{ file.uploaded_file.url }}"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Baixar</a></td>
                 {% else %}
-                  <td class="text-center">Pagamento em análise</td>
+                  <td class="text-center">Pagamento ainda não confirmado</td>
                 {% endif %}
               </tr>
             {% endfor %}

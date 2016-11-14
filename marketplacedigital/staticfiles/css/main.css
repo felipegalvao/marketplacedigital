@@ -20,11 +20,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .navbar-inverse {
-  background-color: #424242;
+  background-color: #E9E9E9;
+  border-bottom: 1px solid #E9E9E9;
+  padding: 7px 0 7px 0;
 }
 
 .navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-brand {
-  color: #FF9900;
+  color: #424242;
+}
+
+.img-logo {
+  max-width: 200px;
 }
 
 body {
@@ -58,6 +64,11 @@ hr {
 }
 
 /* Style for Home Page */
+
+.fa-icon-home {
+  font-size: 8em;
+  padding: 10px 0 10px 0;
+}
 
 .thumbnail a>img, .thumbnail>img {
   padding: 30px;
@@ -94,12 +105,12 @@ hr {
 }
 
 .fluid-home {
-  background-image: url("/static/img/sativa.png");
+  background-image: url("/static/img/type.png");
   padding-top: 30px;
   padding-bottom: 30px;
-  background-color: #E9E9E9;
+  /* background-color: #E9E9E9; */
   font-weight: bold;
-  color: #424242;
+  color: #E9E9E9;
 }
 
 .img-jumbotron-home {

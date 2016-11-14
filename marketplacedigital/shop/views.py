@@ -15,7 +15,6 @@ from django.template import Context
 from .models import Category, Product, ProductFile, Purchase
 from .forms import ProductForm, ProductFileForm
 from users.models import Profile
-from marketplacedigital.settings.project_utils import calculate_seller_commission
 from marketplacedigital.settings import settings_secrets
 
 import requests
@@ -124,45 +123,25 @@ def purchase_confirmation(request, product_slug):
     else:
         value_to_pay = float(value_to_pay)
 
-    purchase = Purchase(user = request.user,
-                        product = product,
-                        value = value_to_pay,
-                        paid = False,
-                        seller_commission=calculate_seller_commission(product.price))
+    purchase, created = Purchase.objects.get_or_create(user = request.user,
+                                                       product = product,
+                                                       defaults={'value': value_to_pay,
+                                                                 'paid': False,
+                                                                 'seller_commission': Decimal(0.0)})
+
+    purchase.calculate_seller_commission(value_to_pay)
+
+    payment_code = purchase.request_payment_code_to_pagseguro()
+    purchase.payment_code = payment_code
     purchase.save()
 
-    purchase_confirmation_email(purchase)
-    sale_confirmation_email(purchase)
+    purchase.purchase_confirmation_email()
+    purchase.sale_confirmation_email()
 
-    dados_pagamento = {
-        "email":"felipect86@gmail.com",
-        "token":"A90C580ABDB1475296FCCDED71E91C04",
-        "currency":"BRL",
-        "reference":str(purchase.id),
-        # "senderName": request.user.first_name + ' ' + request.user.last_name,
-        "senderEmail": str(request.user.email),
-        "itemId1" : "001",
-        "itemDescription1" : "Pagamento do produto - " + product.name,
-        "itemAmount1" : "{0:.2f}".format(value_to_pay),        
-        "itemQuantity1" : "1",
-    }
-
-    print(dados_pagamento)
-
-    codigo_pagamento = ""
-    r = requests.post("https://ws.sandbox.pagseguro.uol.com.br/v2/checkout", data=dados_pagamento)
-    r_texto = r.text
-    codigo_pagamento = find_between(r_texto, "<code>","</code>")
-
-    print(r_texto)
-
-    return redirect('https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=' + codigo_pagamento)
-
-    messages.success(request, 'Sua compra foi concluída. Assim que seu pagamento for aprovado, você será notificado e poderá acessar os seus arquivos.')
-    return redirect('/')
+    return redirect('https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=' + payment_code)
 
 @csrf_exempt
-def notificacao_pagseguro(request):
+def pagseguro_notification(request):
     if request.method == 'POST':
         request.encoding = 'ISO-8859-1'
         notification_code = request.POST['notificationCode']
@@ -200,78 +179,14 @@ def search_products(request):
         products = None
     return render(request, 'shop/search_products.html', { 'products': products })
 
-def find_between( s, first, last ):
-    try:
-        start = s.index( first ) + len( first )
-        end = s.index( last, start )
-        return s[start:end]
-    except ValueError:
-        return ""
+def query_transaction_in_pagseguro(purchase):
+    query_data = {
+        "email":"felipect86@gmail.com",
+        "token":"A90C580ABDB1475296FCCDED71E91C04",
+        "reference":str(purchase.id),
+    }
 
-def purchase_confirmation_email(purchase):    
-    link = 'usuario/minhas_compras/'
-    my_purchases_link = settings.BASE_DOMAIN + link
-
-    email_subject = "Linkplace - Sua compra foi realizada"    
-    to_email = purchase.user.email
-
-    template_name = 'purchase_confirmation_email'
-
-    context = { 'purchase': purchase, 'my_purchases_link': my_purchases_link }
-
-    send_transaction_email(email_subject, template_name, context, to_email)
+    r = requests.post("https://ws.sandbox.pagseguro.uol.com.br/v2/transactions", data=payment_data)
+    r_text = r.text
+    print(r_text)
     
-
-def sale_confirmation_email(purchase):    
-    link = 'usuario/minhas_vendas/'
-    my_sales_link = settings.BASE_DOMAIN + link
-
-    email_subject = "Linkplace - Você acaba de realizar uma venda"    
-    to_email = purchase.product.user.email
-
-    template_name = 'sale_confirmation_email'    
-
-    context = { 'purchase': purchase, 'my_sales_link': my_sales_link }
-
-    send_transaction_email(email_subject, template_name, context, to_email)
-
-def purchase_paid_email(purchase):    
-    link = 'usuario/minhas_compras/'
-    my_purchases_link = settings.BASE_DOMAIN + link
-
-    email_subject = "Linkplace - O pagamento para sua compra foi confirmado"
-    to_email = purchase.user.email
-
-    template_name = 'purchase_paid_email'
-
-    context = { 'purchase': purchase, 'my_purchases_link': my_purchases_link }
-
-    send_transaction_email(email_subject, template_name, context, to_email)
-
-def sale_paid_email(purchase):
-    link = 'usuario/minhas_vendas/'
-    my_sales_link = settings.BASE_DOMAIN + link
-
-    email_subject = "Linkplace - O pagamento para sua venda foi confirmado."
-    to_email = purchase.product.user.email
-
-    template_name = 'sale_paid_email'
-
-    context = { 'purchase': purchase, 'my_sales_link': my_sales_link }
-
-    send_transaction_email(email_subject, template_name, context, to_email)
-
-def send_transaction_email(email_subject, template_name, context, to_email):
-    from_email = "felipect86@gmail.com"    
-
-    text_template = get_template('shop/emails/' + template_name + '.txt')
-    html_template = get_template('shop/emails/' + template_name + '.html')
-
-    d = Context(context)
-
-    text_content = text_template.render(d)
-    html_content = html_template.render(d)
-
-    msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
