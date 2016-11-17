@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'minhas_compras/(?P<purchase_id>[0-9]+)/$', views.show_purchase, name='show_purchase'),
     url(r'minhas_compras/acessar_arquivo/(?P<file_id>[0-9]+)/$', views.send_file, name='send_file'),    
     url(r'ativar/(?P<activation_key>\w+)$', views.activate, name='activate'),
+    url(r'alterar_senha/$', auth_views.password_change, {'template_name': 'users/password_change.html'}, name='password_change'),
+    url(r'alterar_senha_concluido/$', auth_views.password_change_done, name='password_change_done'),
     url(r'resetar_senha/$', auth_views.password_reset, {'template_name': 'users/password_reset.html'}, name='password_reset'),
     url(r'resetar_senha/concluido/$', auth_views.password_reset_done, {'template_name': 'users/password_reset_done.html'}, name='password_reset_done'),
     url(r'resetar_senha/confirmar/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',

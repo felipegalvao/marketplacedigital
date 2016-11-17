@@ -5,10 +5,28 @@ Cinza Escuro: #424242
 Cinza Claro: #E9E9E9
 Cinza: #BCBCBC
 Azul: #3299BB
+
+Verde: #9FC75D
+Verde mais escuro: #8AAD51
 ------------ Fim da Paleta de Cores -----------
 
 
 /* --------------- Original Style for Bootstrap Theme ------------ */
+
+.btn-primary {
+  background-color: #9FC75D;
+  border-color: #8AAD51;
+  color: #424242; 
+}
+
+.btn-default {
+  background-color: #4A4A4A;
+  color: #E9E9E9;
+}
+
+.btn-default:hover {
+  background-color: #737373;
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Open Sans', sans-serif;
@@ -19,13 +37,13 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
 }
 
-.navbar-inverse {
+.navbar-default {
   background-color: #E9E9E9;
   border-bottom: 1px solid #E9E9E9;
   padding: 7px 0 7px 0;
 }
 
-.navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-brand {
+.navbar-default .navbar-nav>li>a, .navbar-default .navbar-brand {
   color: #424242;
 }
 
@@ -60,7 +78,7 @@ footer {
 }
 
 hr {
-  border-color: #FF9900;
+  border-color: #9FC75D;
 }
 
 /* Style for Home Page */
@@ -118,17 +136,19 @@ hr {
   margin: auto;
 }
 
-.btn-cadastrar-home {
+.btn-register-home {
   font-size: 36px;
   margin: 30px 0 30px 0;
   padding: 20px;
-  background-color: #FF9900;
-  border-color: #FF9900;
+  background-color: #9FC75D;
+  border-color: #8AAD51;
   color: #424242;
 }
 
-.btn-cadastrar-home:hover, .btn-cadastrar-home:active {
-  background-color: #D98200;
+
+
+.btn-register-home:hover, .btn-register-home:active, .btn-register-home:focus {
+  background-color: #8AAD51;
   border-color: #D98200;
   color: #424242;
 }
@@ -163,7 +183,7 @@ hr {
 
 
 .span-product-price {
-  background-color: #FF9900;
+  background-color: #9FC75D;
   padding: 10px;    
   z-index: 999;
   display: block;
@@ -209,6 +229,10 @@ hr {
   vertical-align: middle;
 }
 
+.well-filter-sales {
+  background-color: #F7F7F7;
+}
+
 
 /* Styles for Show Product Page */
 
@@ -218,7 +242,7 @@ hr {
 
 .span-price-value {
   font-size: 24px;
-  color: #FF9900;
+  color: #9FC75D;
 }
 
 .span-price-text {
@@ -228,9 +252,9 @@ hr {
 
 .btn-buy {
   font-size: 24px;
-  background-color: #FF9900;
+  background-color: #9FC75D;
   padding: 15px;
-  border-color: #FF9900;
+  border-color: #9FC75D;
   width: 100%;
 }
 

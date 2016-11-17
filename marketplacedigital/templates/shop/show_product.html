@@ -28,7 +28,7 @@
             <p>Uma pequena amostra do produto final, acessível para todos, para que você possa comprovar a sua qualidade.</p>
             <ul>
               {% for product_file in product_files_sample %}
-                <li><a href="{{ product_file.uploaded_file.url }}">{{ product_file.name }}</a></li>
+                <li><a href="{{ product_file.uploaded_file.url }}" target="_blank">{{ product_file.name }}</a></li>
               {% endfor %}
             </ul>
           {% endif %}

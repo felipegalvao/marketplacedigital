@@ -40,9 +40,10 @@
 
     <div class="row">
       <div class="col-md-12">
+        <h4>Arquivos já adicionados</h4>
         <ul>
           {% for file in product_files %}
-            <li><a href="{{ file.uploaded_file.url }}">{{ file.name }}</a></li>
+            <li><a href="{{ file.uploaded_file.url }}" target="_blank">{{ file.name }} - {% if file.approved %}Aprovado{% else %}Ainda não aprovado{% endif %}</a></li>
           {% endfor %}
       </div>
 
