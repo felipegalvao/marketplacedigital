@@ -148,7 +148,7 @@ class Purchase(models.Model):
         self.send_transaction_email(email_subject, template_name, context, to_email)
 
     def send_transaction_email(self, email_subject, template_name, context, to_email):
-        from_email = "felipect86@gmail.com"    
+        from_email = "contato@linkplace.com.br"
 
         text_template = get_template('shop/emails/' + template_name + '.txt')
         html_template = get_template('shop/emails/' + template_name + '.html')
